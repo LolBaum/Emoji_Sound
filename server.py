@@ -44,7 +44,7 @@ class EmojiServer:
                             pass
                     else:
                         pass
-                        # Todo: Hier die "Emojifunktion" einfügen
+                        #EmSound.send_osc_msg(msg, False)
 
                     self.share_message(msg)
             except Exception as e:
@@ -52,19 +52,32 @@ class EmojiServer:
                 print(f"[ERROR] connection to {addr} broke up. [ACTIVE CONNECTIONS] {threading.activeCount() - 1}")
                 connected = False
 
+        for c in self.clients:
+            if (conn, addr) == c:
+                self.clients.remove(c)
+
         conn.close()
 
 
+
     def start(self):
-        self.server.listen()
-        print(f"[LISTENING] Server is listening on {SERVER}")
-        while True:
-            conn, addr = self.server.accept()
-            thread = threading.Thread(target=self.handle_client, args=(conn, addr))
-            self.threads.append(thread)
-            self.clients.append((conn, addr))
-            thread.start()
-            print(f"[ACTIVE CONNECTIONS] {threading.activeCount() - 1}")
+        try:
+            self.server.listen()
+            print(f"[LISTENING] Server is listening on {SERVER}")
+            while True:
+                conn, addr = self.server.accept()
+                thread = threading.Thread(target=self.handle_client, args=(conn, addr))
+                self.threads.append(thread)
+                self.clients.append((conn, addr))
+                thread.start()
+                print(f"[ACTIVE CONNECTIONS] {threading.activeCount() - 1}")
+        except Exception as e:
+            print(e)
+            print("[ERROR] Server crashed...")
+        self.server.close(self)
+        self.server.shutdown(self)
+
+
 
     def share_message(self, msg):
         for conn, _ in self.clients:
@@ -72,6 +85,7 @@ class EmojiServer:
                 conn.send(msg.encode(FORMAT))
             except Exception as e:
                 print(e)
+                print("[ERROR] share message")
 
 if __name__ == "__main__":
     print("[STARTING] server is starting...")
