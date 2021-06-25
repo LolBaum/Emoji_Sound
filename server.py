@@ -5,7 +5,8 @@ import threading
 
 HEADER = 64
 PORT = 5050
-SERVER = socket.gethostbyname(socket.gethostname())
+#SERVER = socket.gethostbyname(socket.gethostname())
+SERVER = "192.168.0.121"
 ADDR = (SERVER, PORT)
 FORMAT = 'utf-8'
 DISCONNECT_MESSAGE = "!DISCONNECT"
@@ -85,7 +86,7 @@ class EmojiServer:
                 conn.send(msg.encode(FORMAT))
             except Exception as e:
                 print(e)
-                print("[ERROR] share message")
+                print("[ERROR] in share message")
 
 if __name__ == "__main__":
     print("[STARTING] server is starting...")
