@@ -1,9 +1,8 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QGroupBox, QDialog, QVBoxLayout, QGridLayout, QLineEdit, QLabel
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QGroupBox, QGridLayout, QLineEdit, QLabel
 from PyQt5 import QtCore
 import threading
 import time
-
 
 import socket
 
@@ -26,45 +25,14 @@ MAX_VERBINDUNGS_VERSUCHE = 3
 VERBINDUNGS_VERSUCHE = 0
 
 CLIENT = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+CLIENT.settimeout(3)
 
-
-
-
-
-EMOJIS = ['😂', '❤', '♥', '😍', '😭', '😘', '😊', '👌', '💕', '👏', '😁', '☺', '♡', '👍', '😩', '🙏', '✌', '😏', '😉', '🙌', '🙈', '💪', '😄', '😒', '💃', '💖', '😃', '😔', '😱', '🎉', '😜', '☯', '🌸', '💜', '💙', '✨', '😳', '💗', '★', '█', '☀', '😡', '😎', '😢', '💋', '😋', '🙊', '😴', '🎶', '💞', '😌', '🔥', '💯', '🔫', '💛', '💁', '💚', '♫', '😞', '😆', '😝', '😪', '�', '😫', '😅', '👊', '💀', '😀', '😚', '😻', '©', '👀', '💘', '🐓', '☕', '👋', '✋', '🎊', '🍕', '❄', '😥', '😕', '💥', '💔', '😤', '😈', '►', '✈', '🔝', '😰', '👿', '☹', '🔋', '✂', '🚫', '📌', '😕', '😐', '🔧', '😒', '😿', '😩', '😦', '┻', '👮', '┳', '😾', '🍈', '🙍', '🍱', '😑', '😠']
-
-# def connect(addr):  # Einfache Verbindung zu nur einem Server
-#     global ADDR
-#     global CONNECTED
-#     print("pre check: ", CONNECTED)
-#     check_connection()
-#     print("after check: ", CONNECTED)
-#
-#     print(f"Connecting to {addr}.")
-#
-#     try:
-#         if CONNECTED:
-#             if ADDR == addr:
-#                 print(f"Already connected to THIS IP.")
-#                 send("testing connection")
-#             else:
-#                 print(f"You were connected to {addr}.")
-#                 send(DISCONNECT_MESSAGE)
-#                 CLIENT.close()
-#                 print(f"Connection to {addr} has been closed for new connection.")
-#                 CLIENT.connect(addr)
-#         else:
-#             CLIENT.connect(addr)
-#     except Exception as error:
-#         print(f"[ERROR] trying to connect to {addr}")
-#         print(error)
-#
-#     ADDR = addr
-
-
-
-
-
+EMOJIS = ['😂', '❤', '♥', '😍', '😭', '😘', '😊', '👌', '💕', '👏', '😁', '☺', '♡', '👍', '😩', '🙏', '✌', '😏', '😉',
+          '🙌', '🙈', '💪', '😄', '😒', '💃', '💖', '😃', '😔', '😱', '🎉', '😜', '☯', '🌸', '💜', '💙', '✨', '😳', '💗',
+          '★', '█', '☀', '😡', '😎', '😢', '💋', '😋', '🙊', '😴', '🎶', '💞', '😌', '🔥', '💯', '🔫', '💛', '💁', '💚',
+          '♫', '😞', '😆', '😝', '😪', '�', '😫', '😅', '👊', '💀', '😀', '😚', '😻', '©', '👀', '💘', '🐓', '☕', '👋',
+          '✋', '🎊', '🍕', '❄', '😥', '😕', '💥', '💔', '😤', '😈', '►', '✈', '🔝', '😰', '👿', '☹', '🔋', '✂', '🚫',
+          '📌', '😕', '😐', '🔧', '😒', '😿', '😩', '😦', '┻', '👮', '┳', '😾', '🍈', '🙍', '🍱', '😑', '😠']
 
 def send(msg):
     global CLIENT
@@ -94,6 +62,7 @@ class MainWindow(QWidget):
         self.width = 120
         self.height = 100
         self.emoji_panels = []
+        self.emoji_buttons = []
         self.funcs = []
         self.messages = []
         self.messages_label = QLabel(self)
@@ -153,12 +122,6 @@ class MainWindow(QWidget):
 
         self.show()
 
-
-    def make_Grid(self):
-        self.a = QGroupBox("test")
-        test_layout = QGridLayout()
-        self.a.setLayout(test_layout)
-
     def make_func_Grid(self):
         row_button = 1
         row_label = 0
@@ -190,7 +153,21 @@ class MainWindow(QWidget):
         server_port_label.setText("Server port")
         func_layout.addWidget(server_port_label, row_label, 3)
 
-        func_layout.addWidget(self.messages_label, row_label+2, 3)
+        button_size_textbox_x = QLineEdit(self)
+        button_size_textbox_x.setText(str(40))  # Global
+        func_layout.addWidget(button_size_textbox_x, row_button+2, 0)
+        self.textboxes["button_size_x"] = button_size_textbox_x
+
+        button_size_textbox_y = QLineEdit(self)
+        button_size_textbox_y.setText(str(40))  # Global
+        func_layout.addWidget(button_size_textbox_y, row_button + 2, 1)
+        self.textboxes["button_size_y"] = button_size_textbox_y
+
+        button_size_button = QPushButton("Set Button Size", self)
+        func_layout.addWidget(button_size_button, row_button+2, 2)
+        button_size_button.clicked.connect(self.set_global_button_size)
+
+        #func_layout.addWidget(self.messages_label, row_label+2, 3)
 
         horizontalGroupBox.setLayout(func_layout)
 
@@ -200,6 +177,18 @@ class MainWindow(QWidget):
         IP = self.textboxes["IP"].text()
         port = int(self.textboxes["port"].text())
         return (IP, port)
+
+    def set_global_button_size(self):
+        try:
+            x = int(self.textboxes["button_size_x"].text())
+            y = int(self.textboxes["button_size_y"].text())
+            print(f"[INFO] resizing Buttons to ({x}, {y})")
+            for b in self.emoji_buttons:
+                b.set_size(x,y)
+        except Exception as e:
+            print(e)
+            print("[ERROR] in set_global_button_size()")
+
 
     def button_connect(self):
         addr = self.get_addr()
@@ -254,6 +243,7 @@ class MainWindow(QWidget):
         for i in range(len(emojilist)):
             button = MyEmojiButton(self, 20, chr(emojilist[i]))
             #print(button.text())
+            self.emoji_buttons.append(button)
             emoji_layout.addWidget(button, i//x, i%x) #chr(128514)
             button.clicked.connect(button.myprint)
 
@@ -268,6 +258,7 @@ class MainWindow(QWidget):
         for i in range(len(emojilist)):
             button = MyEmojiButton(self, 20, emojilist[i])
             #print(button.text())
+            self.emoji_buttons.append(button)
             emoji_layout.addWidget(button, i//x, i%x) #chr(128514)
             button.clicked.connect(button.myprint)
 
@@ -287,14 +278,18 @@ class MainWindow(QWidget):
     def client_receive(self):
         while self.is_running:
             if ZUSTAND == VERBUNDEN:
-                #print(f"[Info] client started listening for answers from the server")
-                msg = CLIENT.recv(2048).decode(FORMAT)
-                if len(msg) > 0:
-                    if msg[0] != "!":
-                        self.messages.append(msg)
-                        self.update_msgs()
-                    print(msg)
-                    time.sleep(0.1)
+                try:
+                    #print(f"[Info] client started listening for answers from the server")
+                    msg = CLIENT.recv(2048).decode(FORMAT)
+                    if len(msg) > 0:
+                        if msg[0] != "!":
+                            self.messages.append(msg)
+                            self.update_msgs()
+                        print(msg)
+                        time.sleep(0.1)
+                except Exception as e:
+                    print(e)
+                    print("[ERROR] in client_receive()")
 
 
 
@@ -328,6 +323,7 @@ class MainWindow(QWidget):
                     CLIENT.close()
                     print(f"Connection to {addr} has been closed for new connection.")
                     CLIENT.connect(addr)
+                CLIENT.settimeout(None)
             except Exception as error:
                 print(f"Verbindungsfehler im Zustand {ZUSTAND}")
                 print(error)
@@ -370,6 +366,11 @@ class MyEmojiButton(QPushButton):
         print(self.mytext)
         send(self.mytext)
 
+    def set_size(self, x, y):
+        self.setMaximumWidth(x)
+        self.setMaximumHeight(y)
+
+
 
 
 def disconnect():
@@ -389,6 +390,3 @@ if __name__ == '__main__':
     w.is_running = False
     send(DISCONNECT_MESSAGE)
     sys.exit(status)
-
-
-    #my_label = Label(root, text='41' + u'\u00A2').pack()
