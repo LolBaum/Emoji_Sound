@@ -11,14 +11,17 @@ PORT = 5050
 FORMAT = 'utf-8'
 DISCONNECT_MESSAGE = "!DISCONNECT"
 SET_NAME_MESSAGE = "!NAME"
+INSTRUCTION_MESSAGE = "!INSTRUCTION"
 #SERVER = "172.25.128.1"
 #SERVER = "127.0.1.1"
-SERVER = "84.238.39.36"
+#SERVER = "84.238.39.36"
+SERVER = "10.10.5.59"
+#SERVER = "79.244.144.34"
 ADDR = (SERVER, PORT)
 
 START = "start"
-VERBUNDEN = "verbunden"
-NICHT_VERBUNDEN = "nicht verbunden"
+VERBUNDEN = "connected"
+NICHT_VERBUNDEN = "not connected"
 ZUSTAND = START
 
 MAX_VERBINDUNGS_VERSUCHE = 3
@@ -48,7 +51,7 @@ def send(msg):
     except:
         print(f"[ERROR] while sending to {ADDR}")
         ZUSTAND = NICHT_VERBUNDEN
-        print(f"[ZUSTAND] {ZUSTAND}")
+        print(f"[STATE] {ZUSTAND}")
 
 
 
@@ -56,7 +59,8 @@ class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.title = 'PyQt5 layout - pythonspot.com'
+        self.title = 'EmojiSound Client'
+        self.username = ""
         self.left = 300
         self.top = 300
         self.width = 120
@@ -70,6 +74,8 @@ class MainWindow(QWidget):
         self.textboxes = {"IP": 0,
                           "port": 0}
         self.zustandslabel = QLabel(self)
+        self.instructionlabel = QLabel(self)
+        self.instructions = []
         self.initUI()
 
         self.setWindowTitle("Emoji Client")
@@ -112,7 +118,25 @@ class MainWindow(QWidget):
         windowLayout.addWidget(self.funcs, 0,0)
 
         windowLayout.addWidget(self.zustandslabel, 0, 1)
+
+        windowLayout.addWidget(self.instructionlabel, 3, 1)
+        self.instructionlabel.setAlignment(QtCore.Qt.AlignLeft)
+        self.instructionlabel.setStyleSheet("border : 1px solid lightgray;")
+        self.instructionlabel.setMinimumWidth(150)
+        #self.instructionlabel.setMaximumSize(200,1000)
+        self.instructionlabel.setWordWrap(True)
+
+
+
+        clear_instruction_button = QPushButton("Clear Instructions", self)
+        windowLayout.addWidget(clear_instruction_button, 2, 1)
+        clear_instruction_button.clicked.connect(self.clear_instructions)
+
+
         windowLayout.addWidget(self.messages_box, 2, 0)
+
+        windowLayout.setColumnStretch(0, 0)
+        windowLayout.setColumnStretch(1, 2)
 
 
 
@@ -121,6 +145,7 @@ class MainWindow(QWidget):
         self.setLayout(windowLayout)
 
         self.show()
+
 
     def make_func_Grid(self):
         row_button = 1
@@ -167,6 +192,15 @@ class MainWindow(QWidget):
         func_layout.addWidget(button_size_button, row_button+2, 2)
         button_size_button.clicked.connect(self.set_global_button_size)
 
+        set_name_textbox = QLineEdit(self)
+        set_name_textbox.setText(str(self.username))  # Global
+        func_layout.addWidget(set_name_textbox, row_button + 3, 1)
+        self.textboxes["set_name"] = set_name_textbox
+
+        set_name_button = QPushButton("Set Name", self)
+        func_layout.addWidget(set_name_button, row_button + 3, 2)
+        set_name_button.clicked.connect(self.set_username)
+
         #func_layout.addWidget(self.messages_label, row_label+2, 3)
 
         horizontalGroupBox.setLayout(func_layout)
@@ -177,6 +211,16 @@ class MainWindow(QWidget):
         IP = self.textboxes["IP"].text()
         port = int(self.textboxes["port"].text())
         return (IP, port)
+
+    def set_username(self):
+        self.username = self.textboxes["set_name"].text()
+        print(f"[INFO] Setting your Username to {self.username}")
+        send(SET_NAME_MESSAGE + self.username)
+
+
+    def clear_instructions(self):
+        self.instructions = []
+        self.instructionlabel.setText("")
 
     def set_global_button_size(self):
         try:
@@ -201,7 +245,7 @@ class MainWindow(QWidget):
         return string
 
     def update_msgs(self):
-        if len(self.messages) > 20:
+        if len(self.messages) > 27:
             self.messages.pop(0)
         self.messages_label.setText(self.msgs_to_string())
 
@@ -209,7 +253,7 @@ class MainWindow(QWidget):
         horizontalGroupBox = QGroupBox("Messages")
         msg_layout = QGridLayout()
 
-        self.messages_label.setText("noch keine Nachrichten")
+        self.messages_label.setText("no messages yet")
         msg_layout.addWidget(self.messages_label, 0,0)
 
         horizontalGroupBox.setLayout(msg_layout)
@@ -285,11 +329,26 @@ class MainWindow(QWidget):
                         if msg[0] != "!":
                             self.messages.append(msg)
                             self.update_msgs()
+                        else:
+                            if INSTRUCTION_MESSAGE in msg:
+                                new_instruction = msg[len(INSTRUCTION_MESSAGE):]
+                                self.instructions.append(new_instruction)
+                                print("instructions: ", self.instructions)
+                                self.instructionlabel.setText(self.instructions_as_text())
+                                print(self.instructionlabel.text())
+
                         print(msg)
                         time.sleep(0.1)
                 except Exception as e:
                     print(e)
                     print("[ERROR] in client_receive()")
+
+    def instructions_as_text(self):
+        text = ""
+        for i in self.instructions:
+            text += i
+            text += "\n"
+        return text
 
 
 
@@ -301,7 +360,7 @@ class MainWindow(QWidget):
         global ZUSTAND
         print(f"Connecting to {addr}.")
 
-        print(f"[ZUSTAND] {ZUSTAND}")
+        print(f"[STATE] {ZUSTAND}")
 
 
         if ZUSTAND == START:
@@ -309,7 +368,7 @@ class MainWindow(QWidget):
                 CLIENT.connect(addr)
                 ZUSTAND = VERBUNDEN
             except Exception as error:
-                print(f"Verbindungsfehler im Zustand {ZUSTAND}")
+                print(f"Connection ERROR in state {ZUSTAND}")
                 print(error)
                 ZUSTAND = START
 
@@ -325,7 +384,7 @@ class MainWindow(QWidget):
                     CLIENT.connect(addr)
                 CLIENT.settimeout(None)
             except Exception as error:
-                print(f"Verbindungsfehler im Zustand {ZUSTAND}")
+                print(f"Connection ERROR in state {ZUSTAND}")
                 print(error)
                 ZUSTAND = NICHT_VERBUNDEN
 
@@ -334,18 +393,20 @@ class MainWindow(QWidget):
                 CLIENT.close()
                 CLIENT = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             except Exception as error:
-                print(f"Verbindungsfehler im Zustand {ZUSTAND}")  # Debug
-                print("Konnte Verbindung nicht schlißen")
+                print(f"Connection ERROR in state {ZUSTAND}")  # Debug
+                print("Connection couldn't be closed")
             try:
                 CLIENT.connect(addr)
+                if self.username != "":
+                    self.set_username()
                 ZUSTAND = VERBUNDEN
             except Exception as error:
-                print(f"Verbindungsfehler im Zustand {ZUSTAND}")  # Debug
+                print(f"Connection ERROR in state {ZUSTAND}")  # Debug
                 print(error)
                 ZUSTAND = NICHT_VERBUNDEN
 
 
-        print(f"[ZUSTAND] {ZUSTAND}")
+        print(f"[STATE] {ZUSTAND}")
 
         ADDR = addr
         self.update_status()
