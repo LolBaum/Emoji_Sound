@@ -416,7 +416,7 @@ class MyEmojiButton(QPushButton):
     def __init__(self, window, size, text="button"):
         super().__init__(text,window)
         self.setStyleSheet("font-size:" + str(size) + "px");
-        self.setMaximumWidth(size + 15)
+        self.setMaximumWidth(size + 23)
         self.setMaximumHeight(size + 15)
         self.mytext = text
         #self.setToolTip(emoji.demojize(text))
