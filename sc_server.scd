@@ -1,47 +1,58 @@
-Server.default.reboot;
-
-SynthDef("EmSynth", {arg freq=500, fmfreq=1, pan=0, att=0.1, rel=20, t_trig=0;
-	var sig, volsaw, volsin;
-	volsaw = freq.linlin(0, 1000, 1, 0.01);
-	volsin = freq.linlin(0, 1000, 0.01, 1);
-	sig = Saw.ar(freq*Decay2.kr(t_trig, att, rel/4)*SinOsc.kr(fmfreq), Decay2.kr(t_trig, att, rel, volsaw))+
-	SinOsc.ar(freq/2*SinOsc.kr(fmfreq*5), 0, Decay2.kr(t_trig, att, rel, volsin));
-	sig = Pan2.ar(sig, pan);
+(
+SynthDef("em_synth_1", {arg pan=0, neg=0.3, neut=0.3, pos=0.3, sent=0.3, dur=15;
+	var sig, oenv, env, env_dur, fmfreq, freq;
+	freq = sent.linlin(-0.6, 0.8, 50, 800);
+	fmfreq = sent.linlin(-0.6, 0.8, 1, 20);
+	env_dur = dur/3;
+	oenv = Env.new([0, 1, 1, 0], [neg*env_dur, neut*env_dur, pos*env_dur]);
+	env = EnvGen.kr(oenv, doneAction: 2);
+	sig = Saw.ar(freq**SinOsc.kr(SinOsc.kr(fmfreq*sent)*fmfreq));
+	sig = Pan2.ar(sig*env, pan);
 	Out.ar(0, sig);
 }).add;
 
-a = Synth(\EmSynth);
-a.set(\freq, 800);
-a.set(\fmfreq, 0.2);
-a.set(\pan, 0);
-a.set(\t_trig, 1);
+SynthDef("em_synth_2", {arg neg=0.3, neut=0.3, pos=0.3, sent=0.3, pan=0, dur=20;
+	var sig, oenv, env, env_dur, freq;
+	freq = sent.linlin(-0.6, 0.8, 60, 200);
+	env_dur = dur/3;
+	oenv = Env.new([0, 1, 1, 0], [neg*env_dur, neut*env_dur, pos*env_dur]);
+	env = EnvGen.kr(oenv, doneAction: 2);
+	sig = Ringz.ar(WhiteNoise.ar(0.2), freq: freq*SinOsc.kr(freq*0.2), mul: 0.1, decaytime: 0.4);
+	sig = Pan2.ar(Compander.ar(sig*env), pan);
+	Out.ar(0, sig);
+}).add;
+
+SynthDef("em_synth_3", {arg neg=0.3, neut=0.3, pos=0.3, sent=0.3, dur=15, pan=0;
+	var freq, fmfreq, sig, volsaw, volsin, oenv, env, env_dur;
+	freq = sent.linlin(-0.6, 0.8, 50, 800);
+	fmfreq = sent.linlin(-0.6, 0.8, 2, 20);
+	env_dur = dur/3;
+	oenv = Env.new([0, 1, 1, 0], [neg*env_dur, neut*env_dur, pos*env_dur]);
+	env = EnvGen.kr(oenv, doneAction: 2);
+	volsaw = freq.linlin(0, 1000, 1, 0.01);
+	volsin = freq.linlin(0, 1000, 0.01, 1);
+	sig = Formant.ar(freq*Saw.kr(fmfreq), mul: 3);
+	sig = Pan2.ar(sig*env, pan);
+	Out.ar(0, sig);
+}).add;
+
+// Synth(\em_synth_1, [neg:0.7, neut:0.3, pos:0.5, sent: 0.2]);
+// Synth(\em_synth_2, [neg:0.05, neut:0.3, pos:0.5, sent: 0.6]);
+// Synth(\em_synth_3, [neg:0.5, neut:0.3, pos:0.5, sent: -0.34]);
+)
 
 // PROGRAM
 (
-
-a = Synth(\EmSynth);
-b = Synth(\EmSynth);
-c = Synth(\EmSynth);
-d = Synth(\EmSynth);
-e = Synth(\EmSynth);
-
-~synths = [a, b, c, d, e];
-~counter = 0; // for indexing the ~synths
+~synths = [\em_synth_1, \em_synth_2, \em_synth_3];
 
 // ServerOptions.devices;
 // Server.default.options.outDevice_("Built-in Output");
 n = NetAddr.new("127.0.0.1", 57120);    // create the NetAddr
 
-f = { arg sent, neg, neut, pos;
-	var freq, fmfreq, synth;
-	freq = sent.linlin(-0.6, 0.8, 50, 2000);
-	fmfreq = neut.linexp(0, 1, 3, 0.01);
-	synth = ~synths[~counter%5];
-	synth.set(\freq, freq);
-	synth.set(\fmfreq, fmfreq);
-	synth.set(\pan, 1.0.rand2);
-	synth.set(\t_trig, 1);
-	~counter = ~counter +1;
+f = { arg neg, neut, pos, sent;
+	var synth;
+	synth = ~synths.choose();
+	Synth(synth, [neg: neg, neut: neut, pos: pos, sent: sent]);
 };
 // create OSC-Listener
 o = OSCFunc({ arg msg, time, addr, recvPort;
@@ -50,7 +61,7 @@ o = OSCFunc({ arg msg, time, addr, recvPort;
 	// if ();
 	msg.postln;
 	keyword = msg[0]; sent = msg[1]; neg = msg[2]; neut = msg[3]; pos = msg[4];
-	f.value(sent: sent, neg: neg, neut: neut, pos: pos);
+	f.value(neg: neg, neut: neut, pos: pos, sent: sent);
 }, '/emoji');
 )
 
