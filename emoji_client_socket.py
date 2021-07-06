@@ -329,7 +329,7 @@ class MainWindow(QWidget):
                     msg = CLIENT.recv(2048).decode(FORMAT)
                     if len(msg) > 0:
                         if msg[0] != "!":
-                            self.messages.append(msg)
+                            self.messages.append(msg[:1])
                             self.update_msgs()
                         else:
                             if INSTRUCTION_MESSAGE in msg:
