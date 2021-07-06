@@ -106,8 +106,8 @@ class EmojiServer:
 
 
     def end(self):
-        for c in self.clients[0]:
-            c.close()
+        for c in self.clients:
+            c[0].close()
         self.server.close(self)
         self.server.shutdown(self)
         sys.exit()
