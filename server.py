@@ -104,13 +104,18 @@ class EmojiServer:
             print("Server is shutting down")
             self.end()
 
-
     def end(self):
-        for c in self.clients:
-            c[0].close()
-        self.server.close(self)
-        self.server.shutdown(self)
-        sys.exit()
+        try:
+            if len(self.clients) > 0:
+                for c in self.clients:
+                    c[0].close()
+            self.server.close(self)
+            self.server.shutdown(self)
+        except Exception as e:
+            print(e)
+            print("[ERROR] Couldn't shut server down properly... ")
+        finally:
+            sys.exit()
 
 
 
