@@ -1,3 +1,6 @@
+s.boot;
+
+s.waitForBoot({
 // Synth-Defs
 SynthDef("em_synth_1", {arg pan=0, neg=0.3, neut=0.3, pos=0.3, sent=0.3, dur=15;
 	var sig, oenv, env, env_dur, fmfreq, freq;
@@ -35,8 +38,7 @@ SynthDef("em_synth_3", {arg neg=0.3, neut=0.3, pos=0.3, sent=0.3, dur=15, pan=0;
 	sig = Pan2.ar(sig*env, pan);
 	Out.ar(0, sig);
 }).add;
-
-// Synth(\em_synth_1, [neg:0.1, neut:0.3, pos:0.5, sent: 0.45]);
+	// Synth(\em_synth_1, [neg:0.1, neut:0.3, pos:0.5, sent: 0.45]);
 // Synth(\em_synth_2, [neg:0.05, neut:0.3, pos:0.5, sent: -0.3]);
 // Synth(\em_synth_3, [neg:0.2, neut:0.3, pos:0.5, sent: 0.4]);
 
@@ -61,6 +63,8 @@ o = OSCFunc({ arg msg, time, addr, recvPort;
 	keyword = msg[0]; sent = msg[1]; neg = msg[2]; neut = msg[3]; pos = msg[4];
 	f.value(neg: neg, neut: neut, pos: pos, sent: sent);
 }, '/emoji');
+
+});
 
 
 // o.free;
