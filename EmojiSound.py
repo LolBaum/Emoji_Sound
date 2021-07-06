@@ -1,9 +1,5 @@
 # Emoji Sounds with Twitter API
 
-from TwitterApi import TwitterApi
-from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
-from random import randrange
-from random import choice
 from oscpy.client import OSCClient
 import json
 
