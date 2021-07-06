@@ -1,12 +1,18 @@
 import socket
 import threading
 from EmojiSound import EmojiSound
+import sys
 
 
 
 HEADER = 64
 PORT = 5050
-SERVER = "85.214.78.6"
+
+system_args = sys.argv[1:]
+if len(system_args) == 0:
+    SERVER = "127.0.0.1"
+elif len(system_args) >= 1:
+    SERVER = system_args[0]
 ADDR = (SERVER, PORT)
 FORMAT = 'utf-8'
 DISCONNECT_MESSAGE = "!DISCONNECT"
@@ -16,7 +22,7 @@ INSTRUCTION_MESSAGE = "!INSTRUCTION"
 print('Server IP: ', SERVER)
 
 
-EmSound = EmojiSound("127.0.0.1", 57110)
+EmSound = EmojiSound(SERVER)
 
 
 class EmojiServer:
@@ -88,16 +94,23 @@ class EmojiServer:
                 thread = threading.Thread(target=self.handle_client, args=(conn, addr))
                 self.threads.append(thread)
                 self.clients.append((conn, addr))
+                thread.deamon = True
                 thread.start()
                 print(f"[ACTIVE CONNECTIONS] {threading.activeCount() - 1}")
         except Exception as e:
             print(e)
             print("[ERROR] Server crashed...")
-            self.server.close(self)
-            self.server.shutdown(self)
-            return
+        finally:
+            print("Server is shutting down")
+            self.end()
+
+
+    def end(self):
+        for c in self.clients[0]:
+            c.close()
         self.server.close(self)
         self.server.shutdown(self)
+        sys.exit()
 
 
 
