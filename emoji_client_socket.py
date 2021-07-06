@@ -8,11 +8,17 @@ import socket
 
 HEADER = 64
 PORT = 5050
+
+system_args = sys.argv[1:]
+if len(system_args) == 0:
+    SERVER = "127.0.0.1"
+elif len(system_args) >= 1:
+    SERVER = system_args[0]
+
 FORMAT = 'utf-8'
 DISCONNECT_MESSAGE = "!DISCONNECT"
 SET_NAME_MESSAGE = "!NAME"
 INSTRUCTION_MESSAGE = "!INSTRUCTION"
-SERVER = "127.0.0.1"
 ADDR = (SERVER, PORT)
 
 START = "start"
