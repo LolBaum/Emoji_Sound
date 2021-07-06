@@ -109,8 +109,8 @@ class EmojiServer:
             if len(self.clients) > 0:
                 for c in self.clients:
                     c[0].close()
-            self.server.close(self)
-            self.server.shutdown(self)
+            self.server.close()
+            self.server.shutdown()
         except Exception as e:
             print(e)
             print("[ERROR] Couldn't shut server down properly... ")
