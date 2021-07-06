@@ -54,11 +54,10 @@ f = { arg neg, neut, pos, sent;
 	synth = ~synths.choose();
 	Synth(synth, [neg: neg, neut: neut, pos: pos, sent: sent]);
 };
+
 // create OSC-Listener
-o = OSCFunc({ arg msg, time, addr, recvPort;
+OSCFunc.new({ arg msg, time, addr, recvPort;
 	var keyword, sent, neg, neut, pos, freq, fmfreq1, fmfreq2, pan;
-	// make sure the msg is formatted correctly
-	// if ();
 	msg.postln;
 	keyword = msg[0]; sent = msg[1]; neg = msg[2]; neut = msg[3]; pos = msg[4];
 	f.value(neg: neg, neut: neut, pos: pos, sent: sent);
