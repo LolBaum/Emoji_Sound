@@ -16,7 +16,7 @@ INSTRUCTION_MESSAGE = "!INSTRUCTION"
 print('Server IP: ', SERVER)
 
 
-EmSound = EmojiSound(SERVER)
+EmSound = EmojiSound("127.0.0.1")
 
 
 class EmojiServer:
