@@ -47,7 +47,10 @@ SynthDef("em_synth_3", {arg neg=0.3, neut=0.3, pos=0.3, sent=0.3, dur=15, pan=0;
 
 // ServerOptions.devices;
 // Server.default.options.outDevice_("Built-in Output");
-n = NetAddr.new("127.0.0.1", 57120);    // create the NetAddr
+n = NetAddr.new("127.0.0.1", NetAddr.langPort);    // create the NetAddr
+
+"Creating OSC Listener at 127.0.0.1".postln;
+"Used port: ".post; NetAddr.langPort.postln;
 
 f = { arg neg, neut, pos, sent;
 	var synth;
