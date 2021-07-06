@@ -12,7 +12,7 @@ FORMAT = 'utf-8'
 DISCONNECT_MESSAGE = "!DISCONNECT"
 SET_NAME_MESSAGE = "!NAME"
 INSTRUCTION_MESSAGE = "!INSTRUCTION"
-
+SERVER = "127.0.0.1"
 ADDR = (SERVER, PORT)
 
 START = "start"
@@ -76,7 +76,7 @@ class MainWindow(QWidget):
 
         self.setWindowTitle("Emoji Client")
 
-        self.connect(ADDR)
+        #self.connect(ADDR)
         self.is_running = True
 
         self.thread = threading.Thread(target=self.client_receive)
@@ -174,19 +174,19 @@ class MainWindow(QWidget):
         server_port_label.setText("Server port")
         func_layout.addWidget(server_port_label, row_label, 3)
 
-        button_size_textbox_x = QLineEdit(self)
-        button_size_textbox_x.setText(str(40))  # Global
-        func_layout.addWidget(button_size_textbox_x, row_button+2, 0)
-        self.textboxes["button_size_x"] = button_size_textbox_x
-
-        button_size_textbox_y = QLineEdit(self)
-        button_size_textbox_y.setText(str(40))  # Global
-        func_layout.addWidget(button_size_textbox_y, row_button + 2, 1)
-        self.textboxes["button_size_y"] = button_size_textbox_y
-
-        button_size_button = QPushButton("Set Button Size", self)
-        func_layout.addWidget(button_size_button, row_button+2, 2)
-        button_size_button.clicked.connect(self.set_global_button_size)
+        # button_size_textbox_x = QLineEdit(self)
+        # button_size_textbox_x.setText(str(40))  # Global
+        # func_layout.addWidget(button_size_textbox_x, row_button+2, 0)
+        # self.textboxes["button_size_x"] = button_size_textbox_x
+        #
+        # button_size_textbox_y = QLineEdit(self)
+        # button_size_textbox_y.setText(str(40))  # Global
+        # func_layout.addWidget(button_size_textbox_y, row_button + 2, 1)
+        # self.textboxes["button_size_y"] = button_size_textbox_y
+        #
+        # button_size_button = QPushButton("Set Button Size", self)
+        # func_layout.addWidget(button_size_button, row_button+2, 2)
+        # button_size_button.clicked.connect(self.set_global_button_size)
 
         set_name_textbox = QLineEdit(self)
         set_name_textbox.setText(str(self.username))  # Global
