@@ -1,19 +1,22 @@
 import socket
 import threading
+from EmojiSound import EmojiSound
 
-#SERVER = '10.10.5.59'
+
 
 HEADER = 64
 PORT = 5050
-#SERVER = socket.gethostbyname(socket.gethostname())
-SERVER = "192.168.0.121"
+SERVER = socket.gethostbyname(socket.gethostname())
 ADDR = (SERVER, PORT)
 FORMAT = 'utf-8'
 DISCONNECT_MESSAGE = "!DISCONNECT"
 SET_NAME_MESSAGE = "!NAME"
+INSTRUCTION_MESSAGE = "!INSTRUCTION"
 
 print('Server IP: ', SERVER)
 
+
+EmSound = EmojiSound()
 
 
 class EmojiServer:
@@ -28,6 +31,9 @@ class EmojiServer:
     def handle_client(self, conn, addr):
         print(f"[NEW CONNECTION] {addr} connected.")
 
+        username = ""
+        identification = addr
+
         connected = True
         while connected:
             try:
@@ -35,22 +41,34 @@ class EmojiServer:
                 if msg_length:
                     msg_length = int(msg_length)
                     msg = conn.recv(msg_length).decode(FORMAT)
-                    print(f"[{addr}] {msg}")
+                    print(f"[{identification}] {msg}")
                     conn.send('!Server received message'.encode(FORMAT))
                     if msg[0] == "!":
                         if msg == DISCONNECT_MESSAGE:
                             connected = False
-                            print(f"[USER DISCONNECTED] ({addr}) dissconnected. [ACTIVE CONNECTIONS] {threading.activeCount() - 2}")
-                        if msg == SET_NAME_MESSAGE:
-                            pass
+                            print(f"[USER DISCONNECTED] ({identification}) dissconnected. [ACTIVE CONNECTIONS] {threading.activeCount() - 2}")
+                        if SET_NAME_MESSAGE in msg:
+                            old_id = identification
+                            username = msg[len(SET_NAME_MESSAGE):]
+                            conn.send(("!Your name has been set to " + username).encode(FORMAT))
+                            if username != "":
+                                identification = username
+                            else:
+                                identification = addr
+                            print(f"[Info] '{old_id}' changed their name to '{identification}'")
+                        if INSTRUCTION_MESSAGE in msg:
+                            self.share_message(f"{INSTRUCTION_MESSAGE}{identification}: {msg[len(INSTRUCTION_MESSAGE):]}\n")
                     else:
-                        pass
-                        #EmSound.send_osc_msg(msg, False)
+                        self.share_message(msg)
+                        EmSound.send_osc_msg(msg, False)
 
-                    self.share_message(msg)
+                    #self.share_message(msg)
             except Exception as e:
                 print(e)
-                print(f"[ERROR] connection to {addr} broke up. [ACTIVE CONNECTIONS] {threading.activeCount() - 1}")
+                if identification != addr:
+                    print(f"[ERROR] connection to {identification} ({addr}) broke up. [ACTIVE CONNECTIONS] {threading.activeCount() - 1}")
+                else:
+                    print(f"[ERROR] connection to {addr} broke up. [ACTIVE CONNECTIONS] {threading.activeCount() - 1}")
                 connected = False
 
         for c in self.clients:
@@ -75,6 +93,9 @@ class EmojiServer:
         except Exception as e:
             print(e)
             print("[ERROR] Server crashed...")
+            self.server.close(self)
+            self.server.shutdown(self)
+            return
         self.server.close(self)
         self.server.shutdown(self)
 
