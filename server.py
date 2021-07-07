@@ -120,7 +120,7 @@ class EmojiServer:
             print("Sending FORCE DISCONNECT to all clients")
             time.sleep(1)
             print("joining all threads")
-            for t, i in enumerate(self.threads):
+            for i, t in enumerate(self.threads):
                 print(f"joining thread {i}")
                 t.join(2)
                 print(f"[WARNING] Thread {i} is still running" if t.isAlive() else f"Thread {i} is turned off")
