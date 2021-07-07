@@ -1,3 +1,9 @@
+s.options.device               = "emoji_SERVER";
+s.options.numInputBusChannels  = 2;
+s.options.numOutputBusChannels = 2;
+s.options.maxLogins            = 4;
+s.options.bindAddress          = "0.0.0.0";
+
 s.boot;
 
 s.waitForBoot({
@@ -38,19 +44,10 @@ SynthDef("em_synth_3", {arg neg=0.3, neut=0.3, pos=0.3, sent=0.3, dur=15, pan=0;
 	sig = Pan2.ar(sig*env, pan);
 	Out.ar(0, sig);
 }).add;
-	// Synth(\em_synth_1, [neg:0.1, neut:0.3, pos:0.5, sent: 0.45]);
-// Synth(\em_synth_2, [neg:0.05, neut:0.3, pos:0.5, sent: -0.3]);
-// Synth(\em_synth_3, [neg:0.2, neut:0.3, pos:0.5, sent: 0.4]);
+s.sync;
 
 // PROGRAM
 ~synths = [\em_synth_1, \em_synth_2, \em_synth_3];
-
-// ServerOptions.devices;
-// Server.default.options.outDevice_("Built-in Output");
-n = NetAddr.new("127.0.0.1", NetAddr.langPort);    // create the NetAddr
-
-"Creating OSC Listener at 127.0.0.1".postln;
-"Used port: ".post; NetAddr.langPort.postln;
 
 f = { arg neg, neut, pos, sent;
 	var synth;
@@ -59,8 +56,10 @@ f = { arg neg, neut, pos, sent;
 };
 
 // create OSC-Listener
-OSCFunc.new({ arg msg, time, addr, recvPort;
-	var keyword, sent, neg, neut, pos, freq, fmfreq1, fmfreq2, pan;
+OSCdef('emoji',
+	{
+	arg msg, time, addr, recvPort;
+	var keyword, sent, neg, neut, pos;
 	msg.postln;
 	keyword = msg[0]; sent = msg[1]; neg = msg[2]; neut = msg[3]; pos = msg[4];
 	f.value(neg: neg, neut: neut, pos: pos, sent: sent);
