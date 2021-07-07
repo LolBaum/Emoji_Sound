@@ -62,7 +62,7 @@ f = { arg neg, neut, pos, sent;
 };
 
 // create OSC-Listener
-OSCFunc({
+OSCdef(\emoji,{
 	arg msg, time, addr, recvPort;
 	var keyword, sent, neg, neut, pos;
 	msg.postln;
