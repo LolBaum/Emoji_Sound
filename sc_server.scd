@@ -5,9 +5,9 @@ s.options.maxLogins            = 4;
 s.options.bindAddress          = "0.0.0.0";
 
 // opening port
-thisProcess.openUDPPort(57110);
-NetAddr.localAddr.postln;
-n = NetAddr.new("127.0.0.1", 57110);
+// thisProcess.openUDPPort(57110);
+// NetAddr.localAddr.postln;
+// n = NetAddr.new("127.0.0.1", 57110);
 
 s.boot;
 
@@ -62,13 +62,14 @@ f = { arg neg, neut, pos, sent;
 };
 
 // create OSC-Listener
-OSCdef(\emoji,{
-	arg msg, time, addr, recvPort;
-	var keyword, sent, neg, neut, pos;
+o = OSCFunc({ arg msg, time, addr, recvPort;
+	var keyword, sent, neg, neut, pos, freq, fmfreq1, fmfreq2, pan;
+	// make sure the msg is formatted correctly
+	// if ();
 	msg.postln;
 	keyword = msg[0]; sent = msg[1]; neg = msg[2]; neut = msg[3]; pos = msg[4];
 	f.value(neg: neg, neut: neut, pos: pos, sent: sent);
-}, '/emoji', n);
+}, '/emoji');
 
 });
 
