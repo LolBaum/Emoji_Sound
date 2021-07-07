@@ -341,7 +341,7 @@ class MainWindow(QWidget):
                                 print(self.instructionlabel.text())
                             elif FORCE_DISCONNECT_MESSAGE in msg:
                                 print("[WARNING] Server Forced client to disconnect")
-                                send(DISCONNECT_MESSAGE)
+                                disconnect()
 
                         print(msg)
                         time.sleep(0.1)
