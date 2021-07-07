@@ -4,6 +4,11 @@ s.options.numOutputBusChannels = 2;
 s.options.maxLogins            = 4;
 s.options.bindAddress          = "0.0.0.0";
 
+// opening port
+thisProcess.openUDPPort(57110);
+NetAddr.localAddr.postln;
+n = NetAddr.new("127.0.0.1", 57110);
+
 s.boot;
 
 s.waitForBoot({
@@ -45,8 +50,9 @@ SynthDef("em_synth_3", {arg neg=0.3, neut=0.3, pos=0.3, sent=0.3, dur=15, pan=0;
 	Out.ar(0, sig);
 }).add;
 s.sync;
+"Created synth-defs".postln;
 
-// PROGRAM
+// Function to play synths
 ~synths = [\em_synth_1, \em_synth_2, \em_synth_3];
 
 f = { arg neg, neut, pos, sent;
@@ -56,14 +62,13 @@ f = { arg neg, neut, pos, sent;
 };
 
 // create OSC-Listener
-OSCdef('emoji',
-	{
+OSCFunc({
 	arg msg, time, addr, recvPort;
 	var keyword, sent, neg, neut, pos;
 	msg.postln;
 	keyword = msg[0]; sent = msg[1]; neg = msg[2]; neut = msg[3]; pos = msg[4];
 	f.value(neg: neg, neut: neut, pos: pos, sent: sent);
-}, '/emoji');
+}, '/emoji', n);
 
 });
 
