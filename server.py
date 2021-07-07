@@ -21,6 +21,8 @@ SET_NAME_MESSAGE = "!NAME"
 INSTRUCTION_MESSAGE = "!INSTRUCTION"
 FORCE_DISCONNECT_MESSAGE = "!FORCEDISCONNECT"
 
+
+
 print('Server IP: ', SERVER)
 
 
@@ -31,6 +33,7 @@ class EmojiServer:
     def __init__(self):
         self.threads = []
         self.clients = []
+        self.SHUTDOWN = False
 
         self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server.bind(ADDR)
@@ -44,6 +47,8 @@ class EmojiServer:
 
         connected = True
         while connected:
+            if self.SHUTDOWN:
+                break
             try:
                 msg_length = conn.recv(HEADER).decode(FORMAT)
                 if msg_length:
@@ -92,6 +97,8 @@ class EmojiServer:
             self.server.listen()
             print(f"[LISTENING] Server is listening on {SERVER}")
             while True:
+                if self.SHUTDOWN:
+                    break
                 conn, addr = self.server.accept()
                 thread = threading.Thread(target=self.handle_client, args=(conn, addr))
                 self.threads.append(thread)
@@ -107,6 +114,7 @@ class EmojiServer:
             self.end()
 
     def end(self):
+        self.SHUTDOWN = True
         try:
             self.share_message(DISCONNECT_MESSAGE)
             print("Sending FORCE DISCONNECT to all clients")
