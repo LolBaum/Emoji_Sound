@@ -120,7 +120,7 @@ class EmojiServer:
         try:
             self.share_message(DISCONNECT_MESSAGE)
             print("Sending FORCE DISCONNECT to all clients")
-            time.sleep(1)
+            #time.sleep(1)
             print("joining all threads")
             for i, t in enumerate(self.threads):
                 print(f"joining thread {i}")
