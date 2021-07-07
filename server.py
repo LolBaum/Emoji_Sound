@@ -107,6 +107,7 @@ class EmojiServer:
 
     def end(self):
         try:
+            self.share_message(DISCONNECT_MESSAGE)
             if len(self.clients) > 0:
                 for c in self.clients:
                     c[0].close()
@@ -121,12 +122,12 @@ class EmojiServer:
 
 
     def share_message(self, msg):
-        for conn, _ in self.clients:
+        for conn, addr in self.clients:
             try:
                 conn.send(msg.encode(FORMAT))
             except Exception as e:
                 print(e)
-                print("[ERROR] in share message")
+                print(f"[ERROR] in share message. Couldn't share '{msg}' with {addr}")
 
 if __name__ == "__main__":
     print("[STARTING] server is starting...")
