@@ -19,6 +19,7 @@ FORMAT = 'utf-8'
 DISCONNECT_MESSAGE = "!DISCONNECT"
 SET_NAME_MESSAGE = "!NAME"
 INSTRUCTION_MESSAGE = "!INSTRUCTION"
+FORCE_DISCONNECT_MESSAGE = "!FORCEDISCONNECT"
 ADDR = (SERVER, PORT)
 
 START = "start"
@@ -338,6 +339,9 @@ class MainWindow(QWidget):
                                 print("instructions: ", self.instructions)
                                 self.instructionlabel.setText(self.instructions_as_text())
                                 print(self.instructionlabel.text())
+                            elif FORCE_DISCONNECT_MESSAGE in msg:
+                                print("[WARNING] Server Forced client to disconnect")
+                                send(DISCONNECT_MESSAGE)
 
                         print(msg)
                         time.sleep(0.1)
