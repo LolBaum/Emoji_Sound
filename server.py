@@ -118,7 +118,7 @@ class EmojiServer:
     def end(self):
         self.SHUTDOWN = True
         try:
-            self.share_message(DISCONNECT_MESSAGE)
+            self.share_message(FORCE_DISCONNECT_MESSAGE)
             print("Sending FORCE DISCONNECT to all clients")
             #time.sleep(1)
             print("joining all threads")
