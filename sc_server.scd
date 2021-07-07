@@ -1,4 +1,4 @@
-s.options.device               = "emoji_SERVER";
+s.options.device               = "sprawl_SERVER";
 s.options.numInputBusChannels  = 2;
 s.options.numOutputBusChannels = 2;
 s.options.maxLogins            = 4;
