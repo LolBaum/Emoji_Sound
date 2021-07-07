@@ -108,15 +108,21 @@ class EmojiServer:
     def end(self):
         try:
             self.share_message(DISCONNECT_MESSAGE)
+            print("Sending FORCE DISCONNECT to all clients")
+            time.sleep(1)
+            print("trying to close all connections")
             if len(self.clients) > 0:
                 for c in self.clients:
+                    print(f"trying to close connection to {c[1]}")
                     c[0].close()
+            print("shutting the socket down, and closing it.")
             self.server.shutdown(socket.SHUT_RDWR)
             self.server.close()
         except Exception as e:
             print(e)
             print("[ERROR] Couldn't shut server down properly... ")
         finally:
+            print("Program is finally going to exit(sys.exit())")
             sys.exit()
 
 
