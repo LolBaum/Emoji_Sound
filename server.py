@@ -123,7 +123,7 @@ class EmojiServer:
             for i, t in enumerate(self.threads):
                 print(f"joining thread {i}")
                 t.join(2)
-                print(f"[WARNING] Thread {i} is still running" if t.isAlive() else f"Thread {i} is turned off")
+                print(f"[WARNING] Thread {i} is still running" if t.is_alive() else f"Thread {i} is turned off")
 
             print("trying to close all connections")
             if len(self.clients) > 0:
