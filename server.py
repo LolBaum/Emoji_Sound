@@ -84,11 +84,13 @@ class EmojiServer:
                     print(f"[ERROR] connection to {addr} broke up. [ACTIVE CONNECTIONS] {threading.activeCount() - 1}")
                 connected = False
 
+        conn.close()
+        print(f"[INFO] connection to ({identification}) has been closed.")
+
         for c in self.clients:
             if (conn, addr) == c:
                 self.clients.remove(c)
-
-        conn.close()
+                print(f"[INFO] Client ({identification}) has removed from the list. {len(self.clients)} clients remaining")
 
 
 
