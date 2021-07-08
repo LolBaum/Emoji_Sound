@@ -9,7 +9,7 @@ class EmojiSound:
     def __init__(self,
                  ip="127.0.0.1",
                  port=57120,
-                 emoji_score_file="emoji_scores.json"):
+                 emoji_score_file="emoji_scores_new.json"):
         # self.analyzer = SentimentIntensityAnalyzer()
         self.sc_server_ip = ip
         self.sc_port = port
