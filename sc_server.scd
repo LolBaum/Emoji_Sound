@@ -61,7 +61,7 @@ SynthDef("em_synth_4", {arg neg=0.3, neut=0.3, pos=0.3, sent=0.3, pan=0, dur=20;
 	Out.ar(0, sig);
 }).add;
 s.sync;
-"Created synth-defs".postln;
+"[INFO] Added Emoji-Synth-Defs".postln;
 
 // Function to play synths
 ~synths = [\em_synth_1, \em_synth_2, \em_synth_3, \em_synth_4];
@@ -82,6 +82,7 @@ o = OSCFunc({ arg msg, time, addr, recvPort;
 	f.value(neg: neg, neut: neut, pos: pos, sent: sent);
 }, '/emoji');
 
+"[INFO] Created OSC-Listener on path /emoji".postln;
 });
 
 
