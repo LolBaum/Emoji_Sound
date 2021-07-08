@@ -1,10 +1,8 @@
-# Emoji Sounds with Twitter API
-
 from oscpy.client import OSCClient
 import json
 
 
-# class to grab a tweet containing a certain emoji_synth.json and play according sound on SC-Server
+# class to get emoji-sentiment score and send it to SC-server
 class EmojiSound:
     def __init__(self,
                  ip="127.0.0.1",
