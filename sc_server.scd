@@ -13,7 +13,7 @@ s.boot;
 
 s.waitForBoot({
 // Synth-Defs
-SynthDef("em_synth_1", {arg pan=0, neg=0.3, neut=0.3, pos=0.3, sent=0.3, dur=15;
+SynthDef("em_synth_1", {arg pan=0, neg=0.3, neut=0.3, pos=0.3, sent=0.3, dur=25;
 	var sig, oenv, env, env_dur, fmfreq, freq;
 	freq = sent.linlin(-0.6, 0.8, 50, 800);
 	fmfreq = sent.linlin(-0.6, 0.8, 1, 20);
@@ -25,7 +25,7 @@ SynthDef("em_synth_1", {arg pan=0, neg=0.3, neut=0.3, pos=0.3, sent=0.3, dur=15;
 	Out.ar(0, sig);
 }).add;
 
-SynthDef("em_synth_2", {arg neg=0.3, neut=0.3, pos=0.3, sent=0.3, pan=0, dur=20;
+SynthDef("em_synth_2", {arg neg=0.3, neut=0.3, pos=0.3, sent=0.3, pan=0, dur=25;
 	var sig, oenv, env, env_dur, freq;
 	freq = sent.linlin(-0.6, 0.8, 60, 200);
 	env_dur = dur/3;
@@ -36,7 +36,7 @@ SynthDef("em_synth_2", {arg neg=0.3, neut=0.3, pos=0.3, sent=0.3, pan=0, dur=20;
 	Out.ar(0, sig);
 }).add;
 
-SynthDef("em_synth_3", {arg neg=0.3, neut=0.3, pos=0.3, sent=0.3, dur=15, pan=0;
+SynthDef("em_synth_3", {arg neg=0.3, neut=0.3, pos=0.3, sent=0.3, dur=25, pan=0;
 	var freq, fmfreq, sig, volsaw, volsin, oenv, env, env_dur;
 	freq = sent.linlin(-0.6, 0.8, 50, 800);
 	fmfreq = sent.linlin(-0.6, 0.8, 2, 20);
@@ -50,7 +50,7 @@ SynthDef("em_synth_3", {arg neg=0.3, neut=0.3, pos=0.3, sent=0.3, dur=15, pan=0;
 	Out.ar(0, sig);
 }).add;
 
-SynthDef("em_synth_4", {arg neg=0.3, neut=0.3, pos=0.3, sent=0.3, pan=0, dur=20;
+SynthDef("em_synth_4", {arg neg=0.3, neut=0.3, pos=0.3, sent=0.3, pan=0, dur=25;
 	var sig, oenv, env, env_dur, freq;
 	freq = sent.linlin(-0.6, 0.8, 60, 200);
 	env_dur = dur/3;
