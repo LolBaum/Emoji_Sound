@@ -4,16 +4,12 @@ s.options.numOutputBusChannels = 2;
 s.options.maxLogins            = 4;
 s.options.bindAddress          = "0.0.0.0";
 
-// opening port
-// thisProcess.openUDPPort(57110);
-// NetAddr.localAddr.postln;
-// n = NetAddr.new("127.0.0.1", 57110);
 
-s.boot;
+~dur = 6; // duration of the synths
 
 s.waitForBoot({
 // Synth-Defs
-SynthDef("em_synth_1", {arg pan=0, neg=0.3, neut=0.3, pos=0.3, sent=0.3, dur=10;
+SynthDef("em_synth_1", {arg pan=0, neg=0.3, neut=0.3, pos=0.3, sent=0.3, dur=6;
 	var sig, oenv, env, fmfreq, freq;
 	freq = sent.linlin(-0.6, 0.8, 50, 800);
 	fmfreq = sent.linlin(-0.6, 0.8, 1, 20);
@@ -24,7 +20,7 @@ SynthDef("em_synth_1", {arg pan=0, neg=0.3, neut=0.3, pos=0.3, sent=0.3, dur=10;
 	Out.ar(0, sig);
 }).add;
 
-SynthDef("em_synth_2", {arg neg=0.3, neut=0.3, pos=0.3, sent=0.3, pan=0, dur=10;
+SynthDef("em_synth_2", {arg neg=0.3, neut=0.3, pos=0.3, sent=0.3, pan=0, dur=6;
 	var sig, oenv, env, freq;
 	freq = sent.linlin(-0.6, 0.8, 60, 200);
 	oenv = Env.new([0, 1, 1, 0], [neg*dur, neut*dur, pos*dur], 2);
@@ -34,7 +30,7 @@ SynthDef("em_synth_2", {arg neg=0.3, neut=0.3, pos=0.3, sent=0.3, pan=0, dur=10;
 	Out.ar(0, sig);
 }).add;
 
-SynthDef("em_synth_3", {arg neg=0.3, neut=0.3, pos=0.3, sent=0.3, dur=10, pan=0;
+SynthDef("em_synth_3", {arg neg=0.3, neut=0.3, pos=0.3, sent=0.3, dur=6, pan=0;
 	var freq, fmfreq, sig, volsaw, volsin, oenv, env;
 	freq = sent.linlin(-0.6, 0.8, 50, 800);
 	fmfreq = sent.linlin(-0.6, 0.8, 2, 20);
@@ -47,7 +43,7 @@ SynthDef("em_synth_3", {arg neg=0.3, neut=0.3, pos=0.3, sent=0.3, dur=10, pan=0;
 	Out.ar(0, sig);
 }).add;
 
-SynthDef("em_synth_4", {arg neg=0.3, neut=0.3, pos=0.3, sent=0.3, pan=0, dur=10;
+SynthDef("em_synth_4", {arg neg=0.3, neut=0.3, pos=0.3, sent=0.3, pan=0, dur=6;
 	var sig, oenv, env, freq;
 	freq = sent.linlin(-0.6, 0.8, 60, 200);
 	oenv = Env.new([0, 1, 1, 0], [neg*dur, neut*dur, pos*dur], 2);
@@ -75,7 +71,7 @@ o = OSCFunc({ arg msg, time, addr, recvPort;
 	// if ();
 	msg.postln;
 	keyword = msg[0]; sent = msg[1]; neg = msg[2]; neut = msg[3]; pos = msg[4];
-	f.value(neg: neg, neut: neut, pos: pos, sent: sent);
+	f.value(neg: neg, neut: neut, pos: pos, sent: sent, dur: ~dur);
 }, '/emoji');
 
 "[INFO] Created OSC-Listener on path /emoji".postln;
