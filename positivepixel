@@ -1,0 +1,6 @@
+
+Positive Pixel 🎛🔊
+
+The piece "Positive Pixel" creates a connection between emojis and sounds. Emojis are small pictograms used in electronic messages. The emoji's primary function is to fill in emotional cues otherwise missing from typed conversation. An extensive analysis about the emotional contents of emojis was done by Novak et al. in "Sentiment of Emojis" (2015). They created a sentiment lexikon for the 751 most frequently used emojis by analyzing messages from Twitter. It turns out that most of the emojis have a positive effect in messages, especially the most popular ones.
+
+During the performance, the provided sentiment lexikon is used as a reference to generate sounds. The participating musicians send emoji-messages to a chat while reacting to a video. The sentiment scores of the emojis are then used as variables for sound synthesis to create an audible reflection of the live-chat.
