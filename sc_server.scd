@@ -4,10 +4,8 @@ s.options.numOutputBusChannels = 2;
 s.options.maxLogins            = 4;
 s.options.bindAddress          = "0.0.0.0";
 
-
-~dur = 6; // duration of the synths
-
 s.waitForBoot({
+~dur = 6; // duration of the synths
 // Synth-Defs
 SynthDef("em_synth_1", {arg pan=0, neg=0.3, neut=0.3, pos=0.3, sent=0.3, dur=6;
 	var sig, oenv, env, fmfreq, freq;
@@ -23,7 +21,7 @@ SynthDef("em_synth_1", {arg pan=0, neg=0.3, neut=0.3, pos=0.3, sent=0.3, dur=6;
 SynthDef("em_synth_2", {arg neg=0.3, neut=0.3, pos=0.3, sent=0.3, pan=0, dur=6;
 	var sig, oenv, env, freq;
 	freq = sent.linlin(-0.6, 0.8, 60, 200);
-	oenv = Env.new([0, 1, 1, 0], [neg*dur, neut*dur, pos*dur], 2);
+	oenv = Env.new([0, 0.2, 0.2, 0], [neg*dur, neut*dur, pos*dur], 2);
 	env = EnvGen.kr(oenv, doneAction: 2);
 	sig = Ringz.ar(WhiteNoise.ar(0.2), freq: freq*SinOsc.kr(freq*0.2), mul: 0.1, decaytime: 0.4);
 	sig = Pan2.ar(sig*env, pan);
@@ -46,36 +44,48 @@ SynthDef("em_synth_3", {arg neg=0.3, neut=0.3, pos=0.3, sent=0.3, dur=6, pan=0;
 SynthDef("em_synth_4", {arg neg=0.3, neut=0.3, pos=0.3, sent=0.3, pan=0, dur=6;
 	var sig, oenv, env, freq;
 	freq = sent.linlin(-0.6, 0.8, 60, 200);
-	oenv = Env.new([0, 1, 1, 0], [neg*dur, neut*dur, pos*dur], 2);
+	oenv = Env.new([0, 0.2, 0.2, 0], [neg*dur, neut*dur, pos*dur], 2);
 	env = EnvGen.kr(oenv, doneAction: 2);
 	sig = LPF.ar(LFDNoise0.ar(mul: 0.2), freq: freq*SinOsc.kr(freq*0.2), mul: freq.linlin(60, 200, 0.005, 0.00005));
 	sig = Pan2.ar(sig*env, pan);
 	Out.ar(0, sig);
 }).add;
 s.sync;
-"[INFO] Added Emoji-Synth-Defs".postln;
+"[INFO] added emoji synth-defs".postln;
 
-// Function to play synths
 ~synths = [\em_synth_1, \em_synth_2, \em_synth_3, \em_synth_4];
 
-f = { arg neg, neut, pos, sent;
+// Function to play synths
+f = { arg neg, neut, pos, sent, dur;
 	var synth;
 	synth = ~synths.choose();
-	Synth(synth, [neg: neg, neut: neut, pos: pos, sent: sent, pan: 1.0.rand2]);
+	Synth(synth, [
+			neg: neg,
+			neut: neut,
+			pos: pos,
+			sent: sent,
+			pan: 1.0.rand2,
+			dur: dur
+		]);
 };
 
-// create OSC-Listener
+// OSC-Listener
 o = OSCFunc({ arg msg, time, addr, recvPort;
 	var keyword, sent, neg, neut, pos, freq, fmfreq1, fmfreq2, pan;
-	// make sure the msg is formatted correctly
-	// if ();
 	msg.postln;
-	keyword = msg[0]; sent = msg[1]; neg = msg[2]; neut = msg[3]; pos = msg[4];
-	f.value(neg: neg, neut: neut, pos: pos, sent: sent, dur: ~dur);
+	keyword = msg[0];
+	sent = msg[1];
+	neg = msg[2];
+	neut = msg[3];
+	pos = msg[4];
+	f.value(neg: neg,
+			neut: neut,
+			pos: pos,
+			sent: sent,
+			dur: ~dur);
 }, '/emoji');
 
-"[INFO] Created OSC-Listener on path /emoji".postln;
+"[INFO] created osc-listener on path /emoji".postln;
 });
-
 
 // o.free;
