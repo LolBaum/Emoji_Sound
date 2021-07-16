@@ -72,7 +72,6 @@ f = { arg neg, neut, pos, sent, dur;
 // OSC-Listener
 o = OSCFunc({ arg msg, time, addr, recvPort;
 	var keyword, sent, neg, neut, pos, freq, fmfreq1, fmfreq2, pan;
-	msg.postln;
 	keyword = msg[0];
 	sent = msg[1];
 	neg = msg[2];
