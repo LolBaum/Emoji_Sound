@@ -58,7 +58,7 @@ s.sync;
 ~synths = [\em_synth_1, \em_synth_2, \em_synth_3, \em_synth_4];
 
 // Function to play synths
-f = { arg neg, neut, pos, sent, dur;
+f = { arg neg, neut, pos, sent, dur, amp;
 	var synth;
 	synth = ~synths.choose();
 	Synth(synth, [
@@ -67,7 +67,8 @@ f = { arg neg, neut, pos, sent, dur;
 			pos: pos,
 			sent: sent,
 			pan: 1.0.rand2,
-			dur: dur
+			dur: dur,
+			amp: amp
 		]);
 };
 
