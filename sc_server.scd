@@ -6,6 +6,8 @@ s.options.bindAddress          = "0.0.0.0";
 
 s.waitForBoot({
 ~dur = 6; // duration of the synths
+~amp = 0.3; // amplitude of synths
+
 // Synth-Defs
 SynthDef("em_synth_1", {arg pan=0, neg=0.3, neut=0.3, pos=0.3, sent=0.3, dur=6, amp=0.5;
 	var sig, oenv, env, fmfreq, freq;
@@ -81,7 +83,8 @@ o = OSCFunc({ arg msg, time, addr, recvPort;
 			neut: neut,
 			pos: pos,
 			sent: sent,
-			dur: ~dur);
+			dur: ~dur,
+			 amp: ~amp);
 }, '/emoji');
 
 "[INFO] created osc-listener on path /emoji".postln;
