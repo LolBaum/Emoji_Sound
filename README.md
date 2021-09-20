@@ -18,9 +18,7 @@ ________________________________________________________________________________
 
 Python 3.6
 
-python-package pyqt5
-
-python-package sockets
+Python-packages: pyqt5, sockets
 
 All python-packages can be install via pip.
 
@@ -37,13 +35,7 @@ SuperCollider 3.0
 
 Python 3.6
 
-python-package sockets
-
-python-package threading
-
-python-package oscpy
-
-python-package json
+Python-packages: sockets, threading, oscpy, json
 
 All python-packages can be install via pip.
 
