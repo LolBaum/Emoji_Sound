@@ -16,9 +16,9 @@ ________________________________________________________________________________
 ## Pre-Requirements
 **PARTICIPANTS** must have the following installed:
 
-Python 3.6
+**Python 3.6**
 
-Python-packages: pyqt5, sockets
+**Python-packages**: pyqt5, sockets
 
 All python-packages can be install via pip.
 
@@ -31,11 +31,11 @@ pip install sockets
 ________________________________________________________________________________________________
 The **HOST** must have the following installed:
 
-SuperCollider 3.0
+**SuperCollider 3.0**
 
-Python 3.6
+**Python 3.6**
 
-Python-packages: sockets, threading, oscpy, json
+**Python-packages**: sockets, threading, oscpy, json
 
 All python-packages can be install via pip.
 
