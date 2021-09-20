@@ -31,7 +31,7 @@ pip install sockets
 ________________________________________________________________________________________________
 The **HOST** must have the following installed:
 
-**SuperCollider 3.0**
+**SuperCollider 3.11**
 
 **Python 3.6**
 
