@@ -1,8 +1,9 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QGroupBox, QGridLayout, QLineEdit, QLabel
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QGroupBox, QGridLayout, QLineEdit, QLabel, QSlider
 from PyQt5 import QtCore
 import threading
 import time
+
 
 import socket
 
@@ -20,6 +21,8 @@ DISCONNECT_MESSAGE = "!DISCONNECT"
 SET_NAME_MESSAGE = "!NAME"
 INSTRUCTION_MESSAGE = "!INSTRUCTION"
 FORCE_DISCONNECT_MESSAGE = "!FORCEDISCONNECT"
+AZIMUTH_MESSAGE = "!AZIMUTH"
+ELEVATION_MESSAGE = "!ELEVATION"
 ADDR = (SERVER, PORT)
 
 START = "start"
@@ -76,8 +79,10 @@ class MainWindow(QWidget):
         self.textboxes = {"IP": 0,
                           "port": 0}
         self.zustandslabel = QLabel(self)
-        self.instructionlabel = QLabel(self)
-        self.instructions = []
+        self.azimuthSlider = QSlider(QtCore.Qt.Horizontal)
+        self.elevationSlider = QSlider(QtCore.Qt.Horizontal)
+        #self.instructionlabel = QLabel(self)
+        #self.instructions = []
         self.initUI()
 
         self.setWindowTitle("Emoji Client")
@@ -121,18 +126,19 @@ class MainWindow(QWidget):
 
         windowLayout.addWidget(self.zustandslabel, 0, 1)
 
-        windowLayout.addWidget(self.instructionlabel, 3, 1)
-        self.instructionlabel.setAlignment(QtCore.Qt.AlignLeft)
-        self.instructionlabel.setStyleSheet("border : 1px solid lightgray;")
-        self.instructionlabel.setMinimumWidth(150)
-        #self.instructionlabel.setMaximumSize(200,1000)
-        self.instructionlabel.setWordWrap(True)
+
+
+        # self.instructionlabel.setAlignment(QtCore.Qt.AlignLeft)
+        # self.instructionlabel.setStyleSheet("border : 1px solid lightgray;")
+        # self.instructionlabel.setMinimumWidth(150)
+        # #self.instructionlabel.setMaximumSize(200,1000)
+        # self.instructionlabel.setWordWrap(True)
 
 
 
-        clear_instruction_button = QPushButton("Clear Instructions", self)
-        windowLayout.addWidget(clear_instruction_button, 2, 1)
-        clear_instruction_button.clicked.connect(self.clear_instructions)
+        # clear_instruction_button = QPushButton("Clear Instructions", self)
+        # windowLayout.addWidget(clear_instruction_button, 2, 1)
+        # clear_instruction_button.clicked.connect(self.clear_instructions)
 
 
         windowLayout.addWidget(self.messages_box, 2, 0)
@@ -203,6 +209,30 @@ class MainWindow(QWidget):
         func_layout.addWidget(set_name_button, row_button + 3, 2)
         set_name_button.clicked.connect(self.set_username)
 
+
+        # windowLayout.addWidget(self.instructionlabel, 3, 1)
+        azimuthLabel = QLabel(self)
+        azimuthLabel.setText("Azimuth")
+        func_layout.addWidget(azimuthLabel, row_button+4, 0)
+
+        func_layout.addWidget(self.azimuthSlider, row_button+4, 1)
+        #self.azimuthSlider.setFocusPolicy(QtCore.Qt.StrongFocus)
+        #self.azimuthSlider.setTickPosition(QSlider.TicksBothSides)
+        #self.azimuthSlider.setTickInterval(10)
+        #self.azimuthSlider.setSingleStep(1)
+        self.azimuthSlider.setRange(0, 99)
+        self.azimuthSlider.setValue(49)
+        self.azimuthSlider.valueChanged.connect(self.changeValue_azimuth)
+
+
+        elevationLabel = QLabel(self)
+        elevationLabel.setText("Elevation")
+        func_layout.addWidget(elevationLabel, row_button+5, 0)
+        func_layout.addWidget(self.elevationSlider, row_button+5, 1)
+        self.elevationSlider.setRange(0, 99)
+        self.elevationSlider.setValue(49)
+        self.elevationSlider.valueChanged.connect(self.changeValue_elevation)
+
         #func_layout.addWidget(self.messages_label, row_label+2, 3)
 
         horizontalGroupBox.setLayout(func_layout)
@@ -250,6 +280,12 @@ class MainWindow(QWidget):
         if len(self.messages) > 27:
             self.messages.pop(0)
         self.messages_label.setText(self.msgs_to_string())
+
+    def changeValue_azimuth(self, value):
+        send(AZIMUTH_MESSAGE + str(value))
+
+    def changeValue_elevation(self, value):
+        send(ELEVATION_MESSAGE + str(value))
 
     def make_msg_box(self):
         horizontalGroupBox = QGroupBox("Messages")
@@ -342,7 +378,7 @@ class MainWindow(QWidget):
                                 print("[WARNING] Server Forced client to disconnect")
                                 disconnect()
 
-                        print(msg)
+                        print(msg+"\n")
                         time.sleep(0.1)
                 except Exception as e:
                     print(e)
@@ -456,3 +492,4 @@ if __name__ == '__main__':
     w.is_running = False
     send(DISCONNECT_MESSAGE)
     sys.exit(status)
+
