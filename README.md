@@ -13,7 +13,7 @@ This project was developed as part of the seminar "Network Systems for Music Int
 In general, the participants connect to the server and can send emojis together with directive localisation info (azimuth, elevation). The python-server then grabs the sentiment information about the emojis and sends an osc-message. The SC-server receives the message and creates a binaural sound based on the information.
 ________________________________________________________________________________________________
 
-## System Requirements
+## Installation
 **PARTICIPANTS** must have the following installed:
 
 **Python 3.6**
@@ -48,7 +48,7 @@ pip install json
 ________________________________________________________________________________________________
 ________________________________________________________________________________________________
 
-## Starting the system
+## Usage
 
 **PARTICIPANTS** as well as the **HOST** need to pull this git-repo.
 
