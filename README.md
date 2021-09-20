@@ -7,7 +7,7 @@ This project was developed as part of the seminar "Network Systems for Music Int
  
 ## Basic funcionality
 
-<img src="other/program_flow.png" width="250"/>
+<img src="other/program_flow.png" width="450"/>
 
 The participants are sending emojis to a chat.
 
