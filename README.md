@@ -7,7 +7,7 @@ This project was developed as part of the seminar "Network Systems for Music Int
  
 ## Basic funcionality
 
-![Alt text](other/program_flow.png "Basic Workflow" width="200")
+![Alt text](other/program_flow.png "Basic Workflow")
 
 The participants are sending emojis to a chat.
 
