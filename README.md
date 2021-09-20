@@ -14,9 +14,11 @@ In general, the participants connect to the server and can send emojis together 
 
 ## Pre-Requirements
 **PARTICIPANTS** must have the following installed:
+
 Python 3.6
-python-package pyqt5 (i.e. installed via "pip install pyqt5")
-python-package sockets (i.e. installed via "pip install sockets")
+
+python-package pyqt5 (i.e. installed via "pip install pyqt5")\n
+python-package sockets (i.e. installed via "pip install sockets")\n
 
 The **HOST** must have the following installed:
 SuperCollider 3.0
