@@ -17,15 +17,23 @@ In general, the participants connect to the server and can send emojis together 
 
 Python 3.6
 
-python-package pyqt5 (i.e. installed via "pip install pyqt5")\n
-python-package sockets (i.e. installed via "pip install sockets")\n
+python-package pyqt5 (i.e. installed via "pip install pyqt5")
+
+python-package sockets (i.e. installed via "pip install sockets")
+
 
 The **HOST** must have the following installed:
+
 SuperCollider 3.0
+
 Python 3.6
+
 python-package sockets
+
 python-package threading
+
 python-package oscpy
+
 python-package json
 
 All python-packages can be install via pip.
