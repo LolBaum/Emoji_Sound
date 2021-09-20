@@ -18,9 +18,16 @@ ________________________________________________________________________________
 
 Python 3.6
 
-python-package pyqt5 (i.e. installed via "pip install pyqt5")
+python-package pyqt5
 
-python-package sockets (i.e. installed via "pip install sockets")
+python-package sockets
+
+All python-packages can be install via pip.
+
+```bash
+pip install pyqt5
+pip install sockets
+```
 
 
 ________________________________________________________________________________________________
@@ -39,12 +46,23 @@ python-package oscpy
 python-package json
 
 All python-packages can be install via pip.
+
+```bash
+pip install threading
+pip install sockets
+pip install oscpy
+pip install json
+```
 ________________________________________________________________________________________________
 ________________________________________________________________________________________________
 
 ## STARTING THE SYSTEM
 
-**PARTICIPANTS** as well as the **HOST** need to pull this git-repo via "git pull https://github.com/LolBaum/Emoji_Sound.git".
+**PARTICIPANTS** as well as the **HOST** need to pull this git-repo.
+
+```bash
+git pull https://github.com/LolBaum/Emoji_Sound.git
+```
 
 ### Starting the server (HOST)
 To start the server: TODO
