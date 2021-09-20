@@ -56,10 +56,10 @@ ________________________________________________________________________________
 git pull https://github.com/LolBaum/Emoji_Sound.git
 ```
 
-### Starting the server (HOST)
+### HOST: Starting the server
 To start the server: TODO
 
-### Connecting to the server (PARTICIPANTS)
+### PARTICIPANTS: Connecting to the server
 To open the interface: TODO
 
 They can choose their username, dis-/reconnect to the server and change the server-IP and port.
