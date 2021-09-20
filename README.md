@@ -1,6 +1,7 @@
 ## Emoji Sound
 20.09.2021
-Laurin and Luzie Ahrens
+
+Laurin Dahm and Luzie Ahrens
 
 This project was developed as part of the seminar "Network Systems for Music Interactions" instructed by Henrik von Coler at TU Berlin (2021). It offers an approach to the sonification of a livechat consisting only of emojis. The sound a new message/an emoji creates varies depending on the sentiment they carry. The sentiment scores for this project are taken from "Sentiment of Emojis" (Novak et al. 2015).
  
