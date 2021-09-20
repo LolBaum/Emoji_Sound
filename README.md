@@ -9,6 +9,7 @@ This project was developed as part of the seminar "Network Systems for Music Int
 
 ![Alt text](other/program_flow.png =200x "Basic Workflow")
 
+<img src="other/program_flow.png" width="200" height="200" />
 The participants are sending emojis to a chat.
 
 They created a sentiment lexikon for the 751 most frequently used emojis by analyzing messages from Twitter. 
