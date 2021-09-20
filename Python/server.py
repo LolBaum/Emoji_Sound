@@ -3,6 +3,7 @@ import threading
 from EmojiSound import EmojiSound
 import sys
 import time
+import math
 
 
 
@@ -20,6 +21,8 @@ DISCONNECT_MESSAGE = "!DISCONNECT"
 SET_NAME_MESSAGE = "!NAME"
 INSTRUCTION_MESSAGE = "!INSTRUCTION"
 FORCE_DISCONNECT_MESSAGE = "!FORCEDISCONNECT"
+AZIMUTH_MESSAGE = "!AZIMUTH"
+ELEVATION_MESSAGE = "!ELEVATION"
 
 
 
@@ -44,6 +47,8 @@ class EmojiServer:
 
         username = ""
         identification = addr
+        azimuth = 0
+        elevation = 0
 
         connected = True
         while connected:
@@ -60,7 +65,17 @@ class EmojiServer:
                         if msg == DISCONNECT_MESSAGE:
                             connected = False
                             print(f"[USER DISCONNECTED] ({identification}) dissconnected. [ACTIVE CONNECTIONS] {threading.activeCount() - 2}")
-                        if SET_NAME_MESSAGE in msg:
+                        elif AZIMUTH_MESSAGE in msg:
+                            if msg[len(AZIMUTH_MESSAGE):].isnumeric():
+                                azimuth = int(msg[len(AZIMUTH_MESSAGE):])
+                                azimuth = (azimuth-50)/50*math.pi/2
+                                print(azimuth)
+                        elif ELEVATION_MESSAGE in msg:
+                            if msg[len(ELEVATION_MESSAGE):].isnumeric():
+                                elevation = int(msg[len(ELEVATION_MESSAGE):])
+                                elevation = (elevation-50)/50*math.pi/2
+                                print(elevation)
+                        elif SET_NAME_MESSAGE in msg:
                             old_id = identification
                             username = msg[len(SET_NAME_MESSAGE):]
                             conn.send(("!Your name has been set to " + username).encode(FORMAT))
@@ -69,7 +84,7 @@ class EmojiServer:
                             else:
                                 identification = addr
                             print(f"[Info] '{old_id}' changed their name to '{identification}'")
-                        if INSTRUCTION_MESSAGE in msg:
+                        elif INSTRUCTION_MESSAGE in msg:
                             self.share_message(f"{INSTRUCTION_MESSAGE}{identification}: {msg[len(INSTRUCTION_MESSAGE):]}\n")
                     else:
                         self.share_message(msg)
