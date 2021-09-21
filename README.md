@@ -8,7 +8,7 @@ This project was developed as part of the seminar "Network Systems for Music Int
 
 ## Basic Funcionality
 
-<img src="other/program_flow.png" width="450"/>
+<img src="other/program_exp.png" width="450"/>
 
 In general, the participants connect to the server and can send emojis together with directive localisation info (azimuth, elevation). The python-server then grabs the sentiment information about the emojis and sends an osc-message. The SC-server receives the message and creates a binaural sound based on the information.
 ________________________________________________________________________________________________
