@@ -3,48 +3,53 @@ from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QGroupBox, QGrid
 from PyQt5 import QtCore
 import threading
 import time
-
-
 import socket
 
-HEADER = 64
-PORT = 5050
-
+# Setting the Server IP via argv. Default value: "127.0.0.1"
 system_args = sys.argv[1:]
 if len(system_args) == 0:
     SERVER = "127.0.0.1"
 elif len(system_args) >= 1:
     SERVER = system_args[0]
 
+'''the following Variables must have the same Value in the client and the server script'''
+# information needed for the Socket Connection
+HEADER = 64
+PORT = 5050
 FORMAT = 'utf-8'
+# Messages beginning with a "!" are used to call particular functions on the server
 DISCONNECT_MESSAGE = "!DISCONNECT"
 SET_NAME_MESSAGE = "!NAME"
 INSTRUCTION_MESSAGE = "!INSTRUCTION"
 FORCE_DISCONNECT_MESSAGE = "!FORCEDISCONNECT"
 AZIMUTH_MESSAGE = "!AZIMUTH"
 ELEVATION_MESSAGE = "!ELEVATION"
-ADDR = (SERVER, PORT)
 
+# State variables to store and display the state of the connection
 START = "start"
-VERBUNDEN = "connected"
-NICHT_VERBUNDEN = "not connected"
-ZUSTAND = START
+CONNECTED = "connected"
+NOT_CONNECTED = "not connected"
+STATE = START
 
-MAX_VERBINDUNGS_VERSUCHE = 3
-VERBINDUNGS_VERSUCHE = 0
+MAX_CONNECTION_ATTEMPTS = 3
+CONNECTION_ATTEMPTS = 0
 
+# creating the Socket
+ADDR = (SERVER, PORT)
 CLIENT = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 CLIENT.settimeout(3)
 
-EMOJIS = ["🙏", "🤘", "😏", "😉", "🙌", "🙈", "💪", "😄", "😒", "💃", "💖", "😃", "😔", "😱", "🎉", "😜", "☯️", "🌸", "💜", 
-          "💙", "✨", "😳", "💗", "⭐️", "❄️", "😡", "😎", "😢", "💋", "😋", "🙊", "😴", "🎶", "💞", "😌", "🔥", "💯", "🔫", 
-          "💛", "💁", "💚", "🎵", "😞", "😆", "😝", "😪", "😫", "😅", "👊", "💀", "😀", "😚", "😻", "©️", "👀", "💘", "🐓", 
-          "👋", "✋", "🎊", "🍕", "😥", "😕", "💥", "💔", "😤", "😈", "▶️", "✈️", "🔝", "😰", "👿", "☹️", "🔋", "✂️", "🚫", 
+# List of all Emojis that will be shown in the interface.
+EMOJIS = ["🙏", "🤘", "😏", "😉", "🙌", "🙈", "💪", "😄", "😒", "💃", "💖", "😃", "😔", "😱", "🎉", "😜", "☯️", "🌸", "💜",
+          "💙", "✨", "😳", "💗", "⭐️", "❄️", "😡", "😎", "😢", "💋", "😋", "🙊", "😴", "🎶", "💞", "😌", "🔥", "💯", "🔫",
+          "💛", "💁", "💚", "🎵", "😞", "😆", "😝", "😪", "😫", "😅", "👊", "💀", "😀", "😚", "😻", "©️", "👀", "💘", "🐓",
+          "👋", "✋", "🎊", "🍕", "😥", "😕", "💥", "💔", "😤", "😈", "▶️", "✈️", "🔝", "😰", "👿", "☹️", "🔋", "✂️", "🚫",
           "📌", "😕", "😐", "🔧", "😒", "😿", "😩", "😦", "👮", "😾", "🍈", "🙍", "🍱", "😑", "😠"]
 
+# Sending a Message through the Socket connection to server. An exception will set the state to NOT_CONNECTED
 def send(msg):
     global CLIENT
-    global ZUSTAND
+    global STATE
     try:
         message = msg.encode(FORMAT)
         msg_length = len(message)
@@ -52,14 +57,24 @@ def send(msg):
         send_length += b' ' * (HEADER - len(send_length))
         CLIENT.send(send_length)
         CLIENT.send(message)
-        #print(CLIENT.recv(2048).decode(FORMAT))
-    except:
+    except Exception as e:
         print(f"[ERROR] while sending to {ADDR}")
-        ZUSTAND = NICHT_VERBUNDEN
-        print(f"[STATE] {ZUSTAND}")
+        print(f"[ERROR]: {e}")
+        STATE = NOT_CONNECTED
+        print(f"[STATE] {STATE}")
+
+# sends the disconnect message to close the socket connection
+def disconnect():
+    global STATE
+    print(DISCONNECT_MESSAGE)
+    send(DISCONNECT_MESSAGE)
+    STATE = NOT_CONNECTED
 
 
-
+'''
+The MainWindow class includes the most elements of the application and creates the GUI on initialization.
+It inherits form a QWidget.
+'''
 class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
@@ -70,6 +85,8 @@ class MainWindow(QWidget):
         self.top = 300
         self.width = 120
         self.height = 100
+
+        # All UI-elements are "declared"
         self.emoji_panels = []
         self.emoji_buttons = []
         self.funcs = []
@@ -81,150 +98,106 @@ class MainWindow(QWidget):
         self.zustandslabel = QLabel(self)
         self.azimuthSlider = QSlider(QtCore.Qt.Horizontal)
         self.elevationSlider = QSlider(QtCore.Qt.Horizontal)
-        #self.instructionlabel = QLabel(self)
-        #self.instructions = []
+
+        # initializing the UI
         self.initUI()
 
-        self.setWindowTitle("Emoji Client")
-
-        #self.connect(ADDR)
         self.is_running = True
 
+        # Another thread is started to receive messages while the application is running
         self.thread = threading.Thread(target=self.client_receive)
         self.thread.start()
 
-
+        # creating a timer for the staus update
         timerTime = QtCore.QTimer(self)
         timerTime.timeout.connect(self.update_status)
         timerTime.start(1000)
-        #self.make_emoji_Grid(10,5)
 
-
-        #self.make_emoji_Button('\U0001F607', 20)
-
-        # button = QPushButton('Click me \U0001F602', self)
-        # button2 = QPushButton('\U0001F607', self)  # Todo: Knopf bewegen
-        # a=25
-        # button2.setStyleSheet("font-size:"+str(a)+"px");
-        # button2.resize(a+15, a+15)
-        # button.resize(150, 50)
-        #button.clicked.connect(self.on_click)
 
     def initUI(self):
+        # setting up the Window
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
-
-        #self.make_emoji_Grid(78, 10)
-        #self.make_emoji_Grid(78, 10, 127744)
-        #self.make_emoji_Grid(78, 10, 128000)
+        # initializing the Emoji Buttons, as well as several controls for the application
         self.make_selected_emoji_Grid(10, EMOJIS)
         self.make_func_Grid()
         self.make_msg_box()
+
+        # the UI-elements are added to the window layout
         windowLayout = QGridLayout()
-
         windowLayout.addWidget(self.funcs, 0,0)
-
         windowLayout.addWidget(self.zustandslabel, 0, 1)
-
-
-
-        # self.instructionlabel.setAlignment(QtCore.Qt.AlignLeft)
-        # self.instructionlabel.setStyleSheet("border : 1px solid lightgray;")
-        # self.instructionlabel.setMinimumWidth(150)
-        # #self.instructionlabel.setMaximumSize(200,1000)
-        # self.instructionlabel.setWordWrap(True)
-
-
-
-        # clear_instruction_button = QPushButton("Clear Instructions", self)
-        # windowLayout.addWidget(clear_instruction_button, 2, 1)
-        # clear_instruction_button.clicked.connect(self.clear_instructions)
-
-
         windowLayout.addWidget(self.messages_box, 2, 0)
-
         windowLayout.setColumnStretch(0, 0)
         windowLayout.setColumnStretch(1, 2)
 
-
-
+        # the emoji panels (currently just one) added to the layout
         for i in range(len(self.emoji_panels)):
             windowLayout.addWidget(self.emoji_panels[i],3,i)
-        self.setLayout(windowLayout)
 
+        # the layout will be applied and displayed afterwards
+        self.setLayout(windowLayout)
         self.show()
 
 
     def make_func_Grid(self):
+        # Creation a Grid for the control functions
         row_button = 1
         row_label = 0
         horizontalGroupBox = QGroupBox("Functions")
         func_layout = QGridLayout()
 
+        # In the following several Buttons will be created an connected with their corresponding functions
+        # Button to disconnect
         disconnect_button = QPushButton("disconnect", self)
         func_layout.addWidget(disconnect_button, row_button, 0)
         disconnect_button.clicked.connect(disconnect)
 
+        # Button to connect
         connect_button = QPushButton("connect", self)
         func_layout.addWidget(connect_button, row_button,1)
         connect_button.clicked.connect(self.button_connect)
 
+        # Textbox for the Server IP
         server_IP_textbox = QLineEdit(self)
         server_IP_textbox.setText(SERVER)  # Global
         func_layout.addWidget(server_IP_textbox, row_button, 2)
         self.textboxes["IP"] = server_IP_textbox
+        # Label for the Server IP
         server_IP_label = QLabel(self)
         server_IP_label.setText("Server IP")
         func_layout.addWidget(server_IP_label, row_label, 2)
 
-
+        # Textbox for the Port
         server_port_textbox = QLineEdit(self)
         server_port_textbox.setText(str(PORT))  # Global
         func_layout.addWidget(server_port_textbox, row_button, 3)
         self.textboxes["port"] = server_port_textbox
+        # Label for the Port
         server_port_label = QLabel(self)
         server_port_label.setText("Server port")
         func_layout.addWidget(server_port_label, row_label, 3)
 
-        # button_size_textbox_x = QLineEdit(self)
-        # button_size_textbox_x.setText(str(40))  # Global
-        # func_layout.addWidget(button_size_textbox_x, row_button+2, 0)
-        # self.textboxes["button_size_x"] = button_size_textbox_x
-        #
-        # button_size_textbox_y = QLineEdit(self)
-        # button_size_textbox_y.setText(str(40))  # Global
-        # func_layout.addWidget(button_size_textbox_y, row_button + 2, 1)
-        # self.textboxes["button_size_y"] = button_size_textbox_y
-        #
-        # button_size_button = QPushButton("Set Button Size", self)
-        # func_layout.addWidget(button_size_button, row_button+2, 2)
-        # button_size_button.clicked.connect(self.set_global_button_size)
-
+        # Textbox for the username
         set_name_textbox = QLineEdit(self)
         set_name_textbox.setText(str(self.username))  # Global
         func_layout.addWidget(set_name_textbox, row_button + 3, 1)
         self.textboxes["set_name"] = set_name_textbox
-
+        # Button to set the username
         set_name_button = QPushButton("Set Name", self)
         func_layout.addWidget(set_name_button, row_button + 3, 2)
         set_name_button.clicked.connect(self.set_username)
 
-
-        # windowLayout.addWidget(self.instructionlabel, 3, 1)
+        # Slider to control the Azimuth
         azimuthLabel = QLabel(self)
         azimuthLabel.setText("Azimuth")
         func_layout.addWidget(azimuthLabel, row_button+4, 0)
-
         func_layout.addWidget(self.azimuthSlider, row_button+4, 1)
-        #self.azimuthSlider.setFocusPolicy(QtCore.Qt.StrongFocus)
-        #self.azimuthSlider.setTickPosition(QSlider.TicksBothSides)
-        #self.azimuthSlider.setTickInterval(10)
-        #self.azimuthSlider.setSingleStep(1)
         self.azimuthSlider.setRange(0, 99)
         self.azimuthSlider.setValue(49)
         self.azimuthSlider.valueChanged.connect(self.changeValue_azimuth)
 
-
+        # Slider to control the Elevation
         elevationLabel = QLabel(self)
         elevationLabel.setText("Elevation")
         func_layout.addWidget(elevationLabel, row_button+5, 0)
@@ -233,27 +206,30 @@ class MainWindow(QWidget):
         self.elevationSlider.setValue(49)
         self.elevationSlider.valueChanged.connect(self.changeValue_elevation)
 
-        #func_layout.addWidget(self.messages_label, row_label+2, 3)
-
+        # the Layout is being applied
         horizontalGroupBox.setLayout(func_layout)
-
         self.funcs = horizontalGroupBox
 
+    # returns IP and Port from the textboxes as Tuple
     def get_addr(self):
         IP = self.textboxes["IP"].text()
         port = int(self.textboxes["port"].text())
         return (IP, port)
 
+    # sets the username to the content aof the set_name textbox
+    # Sends the name change to the server
     def set_username(self):
         self.username = self.textboxes["set_name"].text()
         print(f"[INFO] Setting your Username to {self.username}")
         send(SET_NAME_MESSAGE + self.username)
 
-
+    # -- currently unused
     def clear_instructions(self):
         self.instructions = []
         self.instructionlabel.setText("")
 
+    # -- currently unused
+    # Sets the size of the Emoji Buttons
     def set_global_button_size(self):
         try:
             x = int(self.textboxes["button_size_x"].text())
@@ -265,28 +241,34 @@ class MainWindow(QWidget):
             print(e)
             print("[ERROR] in set_global_button_size()")
 
-
+    # called by "connect"-Button
+    # calls the connect method
     def button_connect(self):
         addr = self.get_addr()
         self.connect(addr)
 
+    # returns a string from all received messages
     def msgs_to_string(self):
         string = ""
         for m in self.messages:
             string += m
         return string
 
+    # updates the message list. Removes the last element if the list gets to long
     def update_msgs(self):
         if len(self.messages) > 27:
             self.messages.pop(0)
         self.messages_label.setText(self.msgs_to_string())
 
+    # sends the server the azimuth Value (args: value)
     def changeValue_azimuth(self, value):
         send(AZIMUTH_MESSAGE + str(value))
 
+    # sends the server the azimuth elevation (args: value)
     def changeValue_elevation(self, value):
         send(ELEVATION_MESSAGE + str(value))
 
+    # creates a message box to display the sent emojis
     def make_msg_box(self):
         horizontalGroupBox = QGroupBox("Messages")
         msg_layout = QGridLayout()
@@ -298,92 +280,90 @@ class MainWindow(QWidget):
 
         self.messages_box = horizontalGroupBox
 
-
-
+    # --unused
+    # --outdated
+    # used to create a grid of Emoji Buttons
     def make_emoji_Grid(self, n, x, start_code = 128514):
         horizontalGroupBox = QGroupBox("Emojis")
         emoji_layout = QGridLayout()
-        #layout.setColumnStretch(1, 4)
-        #layout.setColumnStretch(2, 4)
-
-
 
         for i in range(n):
-            button = MyEmojiButton(self, 20, chr(start_code + i))
-            #print(button.text())
+            button = EmojiButton(self, 20, chr(start_code + i))
             emoji_layout.addWidget(button, i//x, i%x) #chr(128514)
             button.clicked.connect(button.myprint)
 
         horizontalGroupBox.setLayout(emoji_layout)
-
         self.emoji_panels.append(horizontalGroupBox)
 
+    # -- currently unused
+    # creates a grid of Emoji Buttons from their unicode integer values
+    # args: number of columns (int), list of emojis
     def make_selected_emoji_Grid_from_int(self, x, emojilist):
         horizontalGroupBox = QGroupBox("selected Emojis")
         emoji_layout = QGridLayout()
 
         for i in range(len(emojilist)):
-            button = MyEmojiButton(self, 20, chr(emojilist[i]))
-            #print(button.text())
+            button = EmojiButton(self, 20, chr(emojilist[i]))
             self.emoji_buttons.append(button)
             emoji_layout.addWidget(button, i//x, i%x) #chr(128514)
             button.clicked.connect(button.myprint)
 
         horizontalGroupBox.setLayout(emoji_layout)
-
         self.emoji_panels.append(horizontalGroupBox)
 
+    # creates a grid of Emoji Buttons from a list of strings
+    # args: number of columns (int), list of emojis as strings/characters
     def make_selected_emoji_Grid(self, x, emojilist):
         horizontalGroupBox = QGroupBox("selected Emojis")
         emoji_layout = QGridLayout()
 
         for i in range(len(emojilist)):
-            button = MyEmojiButton(self, 20, emojilist[i])
-            #print(button.text())
+            button = EmojiButton(self, 20, emojilist[i])
             self.emoji_buttons.append(button)
             emoji_layout.addWidget(button, i//x, i%x) #chr(128514)
             button.clicked.connect(button.myprint)
 
         horizontalGroupBox.setLayout(emoji_layout)
-
         self.emoji_panels.append(horizontalGroupBox)
 
+    # updates the connection state
     def update_status(self):
-        if ZUSTAND == START:
-            self.zustandslabel.setText(f"<font color=black>{ZUSTAND}</font>")
-        elif ZUSTAND == VERBUNDEN:
-            self.zustandslabel.setText(f"<font color=green>{ZUSTAND}</font>")
-        elif ZUSTAND == NICHT_VERBUNDEN:
-            self.zustandslabel.setText(f"<font color=red>{ZUSTAND}</font>")
+        if STATE == START:
+            self.zustandslabel.setText(f"<font color=black>{STATE}</font>")
+        elif STATE == CONNECTED:
+            self.zustandslabel.setText(f"<font color=green>{STATE}</font>")
+        elif STATE == NOT_CONNECTED:
+            self.zustandslabel.setText(f"<font color=red>{STATE}</font>")
 
-
+    # function is called by the receive thread
+    # receives and handels messages from the sever, as long as the application is running
     def client_receive(self):
         while self.is_running:
-            if ZUSTAND == VERBUNDEN:
+            if STATE == CONNECTED:
                 try:
-                    #print(f"[Info] client started listening for answers from the server")
+                    # decoding the message
                     msg = CLIENT.recv(2048).decode(FORMAT)
                     if len(msg) > 0:
+                        # if the message doesn't begin with a "!" it will be displayed
                         if msg[0] != "!":
                             self.messages.append(msg[:1])
                             self.update_msgs()
+                        # Checking for functional messages (currently just Forced disconnect)
                         else:
-                            if INSTRUCTION_MESSAGE in msg:
-                                new_instruction = msg[len(INSTRUCTION_MESSAGE):]
-                                self.instructions.append(new_instruction)
-                                print("instructions: ", self.instructions)
-                                self.instructionlabel.setText(self.instructions_as_text())
-                                print(self.instructionlabel.text())
-                            elif FORCE_DISCONNECT_MESSAGE in msg:
+                            if FORCE_DISCONNECT_MESSAGE in msg:
                                 print("[WARNING] Server Forced client to disconnect")
                                 disconnect()
-
-                        print(msg+"\n")
+                        if "!Server received message" in msg:
+                            pass
+                        else:
+                            print(msg+"\n")
                         time.sleep(0.1)
                 except Exception as e:
                     print(e)
                     print("[ERROR] in client_receive()")
 
+    # -- currently unused
+    # returns the instructions as a string
     def instructions_as_text(self):
         text = ""
         for i in self.instructions:
@@ -391,29 +371,28 @@ class MainWindow(QWidget):
             text += "\n"
         return text
 
-
-
-
-
-    def connect(self, addr):  # Einfache Verbindung zu nur einem Server
+    # connects to the given IP addres (IP, port)
+    def connect(self, addr):
         global ADDR
         global CLIENT
-        global ZUSTAND
+        global STATE
         print(f"Connecting to {addr}.")
+        print(f"[STATE] {STATE}")
 
-        print(f"[STATE] {ZUSTAND}")
+        # connection behavior depends on the connection state
 
-
-        if ZUSTAND == START:
+        # simply connects to the server
+        if STATE == START:
             try:
                 CLIENT.connect(addr)
-                ZUSTAND = VERBUNDEN
+                STATE = CONNECTED
             except Exception as error:
-                print(f"Connection ERROR in state {ZUSTAND}")
+                print(f"Connection ERROR in state {STATE}")
                 print(error)
-                ZUSTAND = START
+                STATE = START
 
-        if ZUSTAND == VERBUNDEN:
+        # connects to the server and closes connection to the current server if it has a different Address
+        if STATE == CONNECTED:
             try:
                 if ADDR == addr:
                     send("!testing connection")
@@ -425,35 +404,38 @@ class MainWindow(QWidget):
                     CLIENT.connect(addr)
                 CLIENT.settimeout(None)
             except Exception as error:
-                print(f"Connection ERROR in state {ZUSTAND}")
+                print(f"Connection ERROR in state {STATE}")
                 print(error)
-                ZUSTAND = NICHT_VERBUNDEN
+                STATE = NOT_CONNECTED
 
-        if ZUSTAND == NICHT_VERBUNDEN:
+        # tries to create a connection (in case of an error)
+        if STATE == NOT_CONNECTED:
             try:
                 CLIENT.close()
                 CLIENT = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             except Exception as error:
-                print(f"Connection ERROR in state {ZUSTAND}")  # Debug
+                print(f"Connection ERROR in state {STATE}")  # Debug
                 print("Connection couldn't be closed")
             try:
                 CLIENT.connect(addr)
                 if self.username != "":
                     self.set_username()
-                ZUSTAND = VERBUNDEN
+                STATE = CONNECTED
             except Exception as error:
-                print(f"Connection ERROR in state {ZUSTAND}")  # Debug
+                print(f"Connection ERROR in state {STATE}")  # Debug
                 print(error)
-                ZUSTAND = NICHT_VERBUNDEN
+                STATE = NOT_CONNECTED
 
 
-        print(f"[STATE] {ZUSTAND}")
+        print(f"[STATE] {STATE}")
 
         ADDR = addr
         self.update_status()
 
-
-class MyEmojiButton(QPushButton):
+# Class EmojiButton inherits from QPushButton
+# Button displays an emoji
+# on Button press it will send the emoji to the server
+class EmojiButton(QPushButton):
     def __init__(self, window, size, text="button"):
         super().__init__(text,window)
         self.setStyleSheet("font-size:" + str(size) + "px");
@@ -463,23 +445,18 @@ class MyEmojiButton(QPushButton):
         #self.setToolTip(emoji.demojize(text))
         self.setToolTip("")
 
+    # prints and sends the text of the button
     def myprint(self):
-        #print(emoji.demojize(self.mytext))
         print(self.mytext)
         send(self.mytext)
 
+    # resizes the button to the width x and the height y
     def set_size(self, x, y):
         self.setMaximumWidth(x)
         self.setMaximumHeight(y)
 
 
 
-
-def disconnect():
-    global ZUSTAND
-    print(DISCONNECT_MESSAGE)
-    send(DISCONNECT_MESSAGE)
-    ZUSTAND = NICHT_VERBUNDEN
 
 
 
@@ -492,4 +469,3 @@ if __name__ == '__main__':
     w.is_running = False
     send(DISCONNECT_MESSAGE)
     sys.exit(status)
-
