@@ -1,3 +1,6 @@
+// Luzie Ahrens and Laurin Dahm
+// 22.09.2021
+
 s.options.device               = "sprawl_SERVER";
 s.options.numInputBusChannels  = 2;
 s.options.numOutputBusChannels = 2;
