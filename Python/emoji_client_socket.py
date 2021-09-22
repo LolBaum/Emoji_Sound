@@ -1,3 +1,8 @@
+# Luzie Ahrens and Laurin Dahm
+# 22.09.2021
+
+# Interface for sending Emoji-Messages to the Python-Server
+
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QGroupBox, QGridLayout, QLineEdit, QLabel, QSlider
 from PyQt5 import QtCore
