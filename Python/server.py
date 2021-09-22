@@ -1,3 +1,8 @@
+# Luzie Ahrens and Laurin Dahm
+# 22.09.2021
+
+# Script to start the Python-Server and receive Emoji-Messages
+
 import socket
 import threading
 from EmojiSound import EmojiSound
