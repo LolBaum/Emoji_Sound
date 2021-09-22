@@ -60,7 +60,7 @@ SynthDef("emoji_2", {arg neg=0.3, neut=0.3, pos=0.3, sent=0.3,
 		Out.ar(out_bus, sig);
 }).add;
 
-// SECOND SYNTH
+// THIRD SYNTH
 SynthDef("emoji_3", {arg neg=0.3, neut=0.3, pos=0.3, sent=0.3,
 		azim=0,
 		elev=0,
@@ -83,7 +83,7 @@ SynthDef("emoji_3", {arg neg=0.3, neut=0.3, pos=0.3, sent=0.3,
 		Out.ar(out_bus, sig);
 }).add;
 
-// SECOND SYNTH
+// FOURTH SYNTH
 SynthDef("emoji_4", {arg neg=0.3, neut=0.3, pos=0.3, sent=0.3,
 		azim=0,
 		elev=0,
