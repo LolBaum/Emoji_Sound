@@ -1,8 +1,12 @@
+# Luzie Ahrens
+# 22.09.2021
+
 from oscpy.client import OSCClient
 import json
 
 
-# class to get emoji-sentiment score and send it to SC-server
+##### class to get emoji-sentiment score from a dict and send and OSC-Message #####
+
 class EmojiSound:
     def __init__(self,
                  ip="127.0.0.1",
@@ -14,18 +18,7 @@ class EmojiSound:
         self.osc = OSCClient(ip, port, encoding="utf-8")
         self.emoji_scores = json.load(open(emoji_score_file, "r"))
 
-    # function to analyze text and get overall sentiment value (range -1 to 1)
-    #def get_sentiment(self, text):
-    #    scores = self.analyzer.polarity_scores(text)
-    #    return scores["compound"]
-
-#    # function to calc panning (random, if it's a retweet)
-#    def get_panning(self, text):
-#        if text[:2] == "RT":
-#            return randrange(-100, 100, 1)/100  # Retweet: random panning
-#        return 0
-
-    # function to get random tweet from ItemIterator of Tweets
+    # function to get sentiment from dict for a given emoji
     def emoji_sentiment(self, emoji):
         if emoji in self.emoji_scores:
             return self.emoji_scores[emoji]["sentsc"]
