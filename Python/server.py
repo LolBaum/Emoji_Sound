@@ -100,7 +100,7 @@ class EmojiServer:
                         # the message will be shared with all other clients
                         self.share_message(msg)
                         # the message, azimuth and elevation will be send to the SuperCollider Server
-                        EmSound.send_osc_msg(msg, False, azimuth, elevation)
+                        EmSound.send_osc_msg(msg, azimuth, elevation)
 
             except Exception as e:
                 print(e)
