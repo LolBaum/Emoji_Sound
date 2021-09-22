@@ -65,13 +65,15 @@ class EmojiSound:
     # OSC Message that is send to the server
     # contains: synth, frequency-range, tempo, panning
     # frequency range: 50-820
-    def send_osc_msg(self, emoji, print_info=True):
+    def send_osc_msg(self, emoji, azim=0.4, elev=0.1, print_info=False):
         osc_dict = self.get_sentiment_stats(emoji)
         msg = list()
         msg.append(osc_dict["sentsc"])
         msg.append(osc_dict["neg"])
         msg.append(osc_dict["neut"])
         msg.append(osc_dict["pos"])
+        msg.append(azim)
+        msg.append(elev)
         self.osc.send_message(b'/emoji', msg)
         if print_info:
             self.print_info(osc_dict)
