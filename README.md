@@ -19,16 +19,19 @@ In general, the participants connect to the server and can send emojis together 
 <img src="other/SC_struct.png" width="500"/>
 
 SuperCollider receives OSC-Messages via an OSC-Listener. The OSC-Message is always in the following format:
+
+```bash
 -keyword -overall_sentiment_score -negative_sentiment_score -neutral_sentiment_score -positive_sentiment_score -azimuth -elevation
+```
 
 **Ranges**:<br>
 
 -overall_sentiment_score: -1 to 1<br>
 -negative_sentiment_score: 0-1<br>
 -neutral_sentiment_score: 0-1<br>
--positive_sentiment_score: 0-1
--azimuth: -pi/2 to pi/2
--elevation: -pi/2 to pi/2
+-positive_sentiment_score: 0-1<br>
+-azimuth: -pi/2 to pi/2<br>
+-elevation: -pi/2 to pi/2<br>
 
 The arguments from the OSC-message are given to one of four synth-definitions, which is chosen randomly each time. The synth-definitions do several things: 1. they create an amplitude-envelope for the sound according to the sentiment values. 2. they create a binaural encoder and "place" the sound according to the azimuth and elevation from the OSC-message. 
 
