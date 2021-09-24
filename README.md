@@ -25,13 +25,14 @@ SuperCollider receives OSC-Messages via an OSC-Listener. The OSC-Message is alwa
 ```
 
 **Ranges**:<br>
-
--overall_sentiment_score: -1 to 1<br>
--negative_sent_score: 0-1<br>
--neutral_sent_score: 0-1<br>
--positive_sent_score: 0-1<br>
--azimuth: -pi/2 to pi/2<br>
--elevation: -pi/2 to pi/2<br>
+```bash
+overall_sentiment_score: -1 to 1<br>
+negative_sent_score: 0-1<br>
+neutral_sent_score: 0-1<br>
+positive_sent_score: 0-1<br>
+azimuth: -pi/2 to pi/2<br>
+elevation: -pi/2 to pi/2<br>
+```
 
 The arguments from the OSC-message are given to one of four synth-definitions, which is chosen randomly each time. The synth-definitions do several things: 1. they create an amplitude-envelope for the sound according to the sentiment values. 2. they create a binaural encoder and "place" the sound according to the azimuth and elevation from the OSC-message. 
 
