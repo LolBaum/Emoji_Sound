@@ -14,7 +14,7 @@ This project was developed as part of the seminar "Network Systems for Music Int
 
 In general, the participants connect to the server and can send emojis together with directive localisation info (azimuth, elevation). The python-server then grabs the sentiment information about the emojis and sends an osc-message. The SC-server receives the message and creates a binaural sound based on the information (making use of the [SC-HOA library](https://github.com/florian-grond/SC-HOA) by Florian Grond).
 
-### SuperCollider
+### SuperCollider Structure
 
 <img src="other/SC_struct.png" width="500"/>
 
