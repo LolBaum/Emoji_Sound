@@ -105,7 +105,8 @@ python3 emoji_client_socket.py <SERVER IP-ADDRESS>
 ```
 
 
-They can choose their username, dis-/reconnect to the server and change the server-IP and port.
+Participants can choose their username, dis-/reconnect to the server and change the server-IP and port.
+
 Once they are connected, they are able to choose the emojis they want to send and also change the azimuth and elevation.
 
 
