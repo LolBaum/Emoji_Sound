@@ -23,9 +23,9 @@ SuperCollider receives OSC-Messages via an OSC-Listener. The OSC-Message is alwa
 
 **Ranges**:<br>
 
--overall_sentiment_score: -1 to 1
--negative_sentiment_score: 0-1
--neutral_sentiment_score: 0-1
+-overall_sentiment_score: -1 to 1<br>
+-negative_sentiment_score: 0-1<br>
+-neutral_sentiment_score: 0-1<br>
 -positive_sentiment_score: 0-1
 -azimuth: -pi/2 to pi/2
 -elevation: -pi/2 to pi/2
