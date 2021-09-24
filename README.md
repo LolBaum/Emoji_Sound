@@ -18,7 +18,7 @@ In general, the participants connect to the server and can send emojis together 
 
 <img src="other/SC_struct.png" width="500"/>
 
-SuperCollider receives OSC-Messages via an OSC-Listener. The arguments from the OSC-message are then given to one of four synth-definitions, which are chosen randomly each time. The synth-definitions do several things: 1. they create an amplitude-envelope for the sound according to the sentiment values from the OSC-message. 2. they create a binaural encoder and "place" the sound according to the azimuth and elevation from the OSC-message. The signal is send to the ambisonics bus. The binaural decoder further processes the signal and makes it audible by sending it to the SC-output (default 0).
+SuperCollider receives OSC-Messages via an OSC-Listener. The arguments from the OSC-message are given to one of four synth-definitions, which are chosen randomly each time. The synth-definitions do several things: 1. they create an amplitude-envelope for the sound according to the sentiment values from the OSC-message. 2. they create a binaural encoder and "place" the sound according to the azimuth and elevation from the OSC-message. The signal is send to the ambisonics bus. The binaural decoder further processes the signal and makes it audible by sending it to the SC-output (default 0).
 
 ________________________________________________________________________________________________
 
