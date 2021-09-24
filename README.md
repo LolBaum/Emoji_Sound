@@ -34,9 +34,12 @@ azimuth: -pi/2 to pi/2
 elevation: -pi/2 to pi/2
 ```
 
-The arguments from the OSC-message are given to one of four synth-definitions, which is chosen randomly each time. The synth-definitions do several things: 1. they create an amplitude-envelope for the sound according to the sentiment values. 2. they create a binaural encoder and "place" the sound according to the azimuth and elevation from the OSC-message. 
+The arguments from the OSC-message are given to one of four synth-definitions, which is chosen randomly each time. The synth-definitions do several things:<br>
+1. they create an amplitude-envelope for the sound according to the sentiment values.<br> 
+2. they create a binaural encoder and "place" the sound according to the azimuth and elevation from the OSC-message. 
 
-The signal is send to the ambisonics bus. The binaural decoder further processes the signal and makes it audible by sending it to the SC-output (default 0).
+The signal is send to the ambisonics bus.<br>
+The binaural decoder further processes the signal and makes it audible by sending it to the SC-output (default 0).
 
 ________________________________________________________________________________________________
 
