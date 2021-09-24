@@ -21,15 +21,15 @@ In general, the participants connect to the server and can send emojis together 
 SuperCollider receives OSC-Messages via an OSC-Listener. The OSC-Message is always in the following format:
 
 ```bash
--keyword -overall_sentiment -negative_sentiment -neutral_sentiment -positive_sentiment -azimuth -elevation
+-keyword -overall -negative -neutral -positive -azimuth -elevation
 ```
 
 **Ranges**:<br>
 ```bash
-overall_sentiment: -1 to 1
-negative_sentiment: 0-1
-neutral_sentiment: 0-1
-positive_sentiment: 0-1
+overall (overall sentiment score): -1 to 1
+negative (negative sentiment score): 0-1
+neutral (neutral sentiment score): 0-1
+positive (positive sentiment score): 0-1
 azimuth: -pi/2 to pi/2
 elevation: -pi/2 to pi/2
 ```
