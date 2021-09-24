@@ -34,6 +34,7 @@ azimuth: -pi/2 to pi/2
 elevation: -pi/2 to pi/2
 ```
 
+### Synth-Definitions
 The arguments from the OSC-message are given to one of four synth-definitions, which is chosen randomly each time.<br>
 The synth-definitions do several things:<br>
 
