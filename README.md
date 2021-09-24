@@ -93,7 +93,7 @@ git pull https://github.com/LolBaum/Emoji_Sound.git
 ### HOST: Starting the server
 To start the server:
 ```bash
-sclang sc_server.scd 
+sclang sc_server_binaural.scd 
 python3 server.py <SERVER IP-ADDRESS>
 ```
 
