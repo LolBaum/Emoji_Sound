@@ -1,6 +1,10 @@
 // Luzie Ahrens and Laurin Dahm
 // 22.09.2021
 
+// SC-script to receive OSC-Messages and create a sound according to the sentiment/localization-information
+// incoming OSC-Messages must be in the following format:
+// "keyword sentiment negative neutral positive azimuth elevation"
+
 s.options.device               = "sprawl_SERVER";
 s.options.numInputBusChannels  = 2;
 s.options.numOutputBusChannels = 2;
@@ -20,7 +24,7 @@ s.waitForBoot({
 // Synth Definitions
 /////////////////////////////////////////////////////////////////////////////////
 
-// SECOND SYNTH
+// FIRST SYNTH
 SynthDef("emoji_1", {arg neg=0.3, neut=0.3, pos=0.3, sent=0.3,
 		azim=0,
 		elev=0,
