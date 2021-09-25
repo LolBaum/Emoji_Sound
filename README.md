@@ -40,7 +40,7 @@ The synth-definitions do several things:<br>
 
 1. they create a signal.<br>
 2. they create an amplitude-envelope for the signal according to the sentiment values.<br>
-3. they create a binaural encoder according to the azimuth and elevation from the OSC-message.<br>
+3. they create a binaural encoder with the azimuth and elevation from the OSC-message.<br>
 4. they send the signal to the ambisonics bus.
 
 The binaural decoder further processes the signal and makes it audible by sending it to the SC-output (default 0).
