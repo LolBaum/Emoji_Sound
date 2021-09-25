@@ -93,15 +93,15 @@ ________________________________________________________________________________
 ### HOST: Starting the server
 To start the server:
 ```bash
-sclang sc_server_binaural.scd 
-python3 server.py <SERVER IP-ADDRESS>
+sclang SC/sc_server_binaural.scd 
+python3 Python/server.py <SERVER IP-ADDRESS>
 ```
 
 
 ### PARTICIPANTS: Connecting to the server
 To open the interface: 
 ```bash
-python3 emoji_client_socket.py <SERVER IP-ADDRESS>
+python3 Python/emoji_client_socket.py <SERVER IP-ADDRESS>
 ```
 
 
