@@ -81,13 +81,11 @@ class EmojiServer:
                             if msg[len(AZIMUTH_MESSAGE):].isnumeric():
                                 azimuth = int(msg[len(AZIMUTH_MESSAGE):])
                                 azimuth = (azimuth-50)/50*math.pi/2
-                                print(azimuth)
                         # set the elevation value
                         elif ELEVATION_MESSAGE in msg:
                             if msg[len(ELEVATION_MESSAGE):].isnumeric():
                                 elevation = int(msg[len(ELEVATION_MESSAGE):])
                                 elevation = (elevation-50)/50*math.pi/2
-                                print(elevation)
                         # set the Username
                         elif SET_NAME_MESSAGE in msg:
                             old_id = identification
