@@ -8,6 +8,10 @@ This project was developed as part of the seminar "Network Systems for Music Int
 
 ## Documentation
 
+### Demonstration video
+
+A video demonstrating the sound and usage of the interface can be found here.
+
 ### General
 
 <img src="other/program_exp.png" width="450"/>
@@ -42,8 +46,16 @@ The synth-definitions do several things:<br>
 2. they create an amplitude-envelope for the signal according to the sentiment values.<br>
 3. they create a binaural encoder with the azimuth and elevation from the OSC-message.<br>
 4. they send the signal to the ambisonics bus.
-
+5. 
 The binaural decoder further processes the signal and makes it audible by sending it to the SC-output (default 0).
+
+#### Influence of the sentiment scores on the sound
+
+The attack, sustain and release of the created sounds depends on the negative, neutral and positive sentiment scores of the given emoji. The negative score is mapped to the attack time, the neutral score to the sustain time and the positive score to the release time.
+
+<img src="other/amp_expl.png" width="500"/>
+
+Very negative emojis will therefore have a long attack and a short release, whereas positive emojis have a short attack and a long release.
 
 ________________________________________________________________________________________________
 
@@ -90,24 +102,30 @@ ________________________________________________________________________________
 
 ## Usage
 
-### HOST: Starting the server
-To start the server:
+### HOST: 1. Running the SuperCollider-Script
+
+Run the SC-script **sc_server_binaural.scd** which can be found in the folder /SC. You can run it via the SC-IDE or via shell/terminal command:
+
 ```bash
 sclang SC/sc_server_binaural.scd 
-python3 Python/server.py <SERVER IP-ADDRESS>
 ```
 
+### HOST: 2. Start the Python-Server
 
-### PARTICIPANTS: Connecting to the server
-To open the interface: 
+Start the server by running the python-script **server.py** which can be found in the folder /Python. You can run it via a Python-IDE or via shell/terminal command:
+
+```bash
+python3 Python/server.py <SERVER IP-ADDRESS>
+```
+If you don't specify a server IP-address it will run on your localhost (which can be used just fine for testing).
+
+### PARTICIPANTS: 1. Connect to the Server
+
+Participants can open the interface via the script **emoji_client_socket.py** which can be found in the folder /Python.
+
 ```bash
 python3 Python/emoji_client_socket.py <SERVER IP-ADDRESS>
 ```
+If no server IP-address is specified, it will try to connect to your localhost.
 
-
-Participants can choose their username, dis-/reconnect to the server and change the server-IP and port.
-
-Once they are connected, they are able to choose the emojis they want to send and also change the azimuth and elevation.
-
-
-
+Participants can use the interface to choose their username, dis-/reconnect to the server and change the server-IP and port. Once they are connected, they are able to send emojis to the server (by clicking on them) and also change the azimuth and elevation.
