@@ -8,7 +8,7 @@ This project was developed as part of the seminar "Network Systems for Music Int
  
  ## README-Content
 1. Documentation
-   1. Demo Video
+   1. Demo Videos
    2. General Project Structure
    3. SuperCollider: Structure, Synth-Explanation
 2. Installation
@@ -17,20 +17,20 @@ This project was developed as part of the seminar "Network Systems for Music Int
 ________________________________________________________________________________________________
 ## Documentation
 
-### Demo Video
+### 1. Demo Videos
 
 A video demonstrating the binaural sound and usage of the interface can be found here: [Demo Binaural System](https://vimeo.com/616841018/710a24b078).
 
 A video of the "Electronic Orchestra Charlottenburg" using the system can be found here: [Demo Orchestra](https://vimeo.com/616843419/0ef7e9712f).
 
 
-### General Project Structure
+### 2. General Project Structure
 
 <img src="other/program_exp.png" width="450"/>
 
 In general, the participants connect to the server and can send emojis together with directive localisation info (azimuth, elevation). The python-server then grabs the sentiment information about the emojis and sends an osc-message. The SC-server receives the message and creates a binaural sound based on the information (making use of the [SC-HOA library](https://github.com/florian-grond/SC-HOA) by Florian Grond).
 
-### SuperCollider Structure
+### 3. SuperCollider: Structure
 
 <img src="other/SC_struct.png" width="500"/>
 
@@ -50,15 +50,15 @@ azimuth: -pi/2 to pi/2
 elevation: -pi/2 to pi/2
 ```
 
-### Synthesized Sounds: Synth-Definitions
-The arguments from the OSC-message are given to one of four synth-definitions, which is chosen randomly each time.<br>
+### 3. SuperCollider: Synthesized Sounds
+The arguments from the OSC-message are given to one of four synth-definitions in SuperCollider (chosen randomly each time).<br>
 The synth-definitions do several things:<br>
 
 1. they create a signal.<br>
 2. they create an amplitude-envelope for the signal according to the sentiment values.<br>
 3. they create a binaural encoder with the azimuth and elevation from the OSC-message.<br>
 4. they send the signal to the ambisonics bus.
-5. 
+
 The binaural decoder further processes the signal and makes it audible by sending it to the SC-output (default 0).
 
 #### Influence of the sentiment scores on the sound
