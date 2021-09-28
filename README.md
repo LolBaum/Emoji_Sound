@@ -21,7 +21,7 @@ ________________________________________________________________________________
 
 A video demonstrating the binaural sound and usage of the interface can be found here: [Demo Binaural System](https://vimeo.com/616841018/710a24b078).
 
-A video of the "Electronic Orchestra Charlottenburg" using the system can be found here: [Demo Orchestra](https://vimeo.com/616843419/0ef7e9712f).
+A video of the "Electronic Orchestra Charlottenburg" using the previous, non-binaural system can be found here: [Demo Orchestra](https://vimeo.com/616843419/0ef7e9712f).
 
 
 ### 2. General Project Structure
