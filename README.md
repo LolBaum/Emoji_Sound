@@ -10,7 +10,7 @@ This project was developed as part of the seminar "Network Systems for Music Int
 1. Documentation
    1. Demo Videos
    2. General Project Structure
-   3. SuperCollider: Structure, Synth-Explanation
+   3. SuperCollider: structure, synthesized sounds
 2. Installation
 3. Usage
 
