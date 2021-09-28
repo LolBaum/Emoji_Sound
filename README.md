@@ -130,7 +130,7 @@ You can run it via a Python-IDE or via shell/terminal command:
 ```bash
 python3 Python/server.py <SERVER IP-ADDRESS>
 ```
-If you don't specify a server IP-address it will run on your localhost (which can be used just fine for testing).
+If you don't specify a server IP-address it will run on your localhost (which can be used for testing).
 
 ### PARTICIPANTS: Connect to the Server
 
