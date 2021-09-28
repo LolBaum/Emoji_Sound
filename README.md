@@ -104,7 +104,8 @@ ________________________________________________________________________________
 
 ### HOST: 1. Running the SuperCollider-Script
 
-Run the SC-script **sc_server_binaural.scd** which can be found in the folder /SC. You can run it via the SC-IDE or via shell/terminal command:
+Run the SC-script **sc_server_binaural.scd** which can be found in the folder /SC.<br>
+You can run it via the SC-IDE or via shell/terminal command:
 
 ```bash
 sclang SC/sc_server_binaural.scd 
@@ -112,14 +113,15 @@ sclang SC/sc_server_binaural.scd
 
 ### HOST: 2. Start the Python-Server
 
-Start the server by running the python-script **server.py** which can be found in the folder /Python. You can run it via a Python-IDE or via shell/terminal command:
+Start the server by running the python-script **server.py** which can be found in the folder /Python.<br>
+You can run it via a Python-IDE or via shell/terminal command:
 
 ```bash
 python3 Python/server.py <SERVER IP-ADDRESS>
 ```
 If you don't specify a server IP-address it will run on your localhost (which can be used just fine for testing).
 
-### PARTICIPANTS: 1. Connect to the Server
+### PARTICIPANTS: Connect to the Server
 
 Participants can open the interface via the script **emoji_client_socket.py** which can be found in the folder /Python.
 
