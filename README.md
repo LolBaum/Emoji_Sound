@@ -5,14 +5,26 @@ Laurin Dahm and Luzie Ahrens
 
 This project was developed as part of the seminar "Network Systems for Music Interactions" instructed by Henrik von Coler at TU Berlin (2021). It is an approach to the sonification of a livechat consisting of emojis. The sound an emoji creates varies depending on the sentiment they carry. The sentiment scores for this project are taken from ["Sentiment of Emojis"](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0144296) (Novak et al. 2015). More specificly, this website: [Emoji Sentiment Ranking v1.0](http://kt.ijs.si/data/Emoji_sentiment_ranking/).
  ________________________________________________________________________________________________
+ 
+ ## README-Content
+1. Documentation
+   1. Demo Video
+   2. General Project Structure
+   3. SuperCollider: Structure, Synth-Explanation
+2. Installation
+3. Usage
 
+________________________________________________________________________________________________
 ## Documentation
 
-### Demonstration video
+### Demo Video
 
-A video demonstrating the sound and usage of the interface can be found here.
+A video demonstrating the binaural sound and usage of the interface can be found here: [Demo Binaural System](https://vimeo.com/616841018/710a24b078).
 
-### General
+A video of the "Electronic Orchestra Charlottenburg" using the system can be found here: [Demo Orchestra](https://vimeo.com/616843419/0ef7e9712f).
+
+
+### General Project Structure
 
 <img src="other/program_exp.png" width="450"/>
 
@@ -38,7 +50,7 @@ azimuth: -pi/2 to pi/2
 elevation: -pi/2 to pi/2
 ```
 
-### Synth-Definitions
+### Synthesized Sounds: Synth-Definitions
 The arguments from the OSC-message are given to one of four synth-definitions, which is chosen randomly each time.<br>
 The synth-definitions do several things:<br>
 
