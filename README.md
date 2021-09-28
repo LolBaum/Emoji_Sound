@@ -63,7 +63,7 @@ The binaural decoder further processes the signal and makes it audible by sendin
 
 #### Influence of the sentiment scores on the sound
 
-The attack, sustain and release of the created sounds depends on the negative, neutral and positive sentiment scores of the given emoji. The negative score is mapped to the attack time, the neutral score to the sustain time and the positive score to the release time.
+The attack, sustain and release of the created sounds depend on the negative, neutral and positive sentiment scores of the given emoji. The negative score is mapped to the attack time, the neutral score to the sustain time and the positive score to the release time.
 
 <img src="other/amp_expl.png" width="500"/>
 
