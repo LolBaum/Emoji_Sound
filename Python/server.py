@@ -68,7 +68,6 @@ class EmojiServer:
                 if msg_length:
                     msg_length = int(msg_length)
                     msg = conn.recv(msg_length).decode(FORMAT)
-                    print(f"[{identification}] {msg}")
                     conn.send('!Server received message\n'.encode(FORMAT))
                     # Checking for Control Messages which begin with a "!"
                     if msg[0] == "!":
@@ -100,6 +99,7 @@ class EmojiServer:
                         elif INSTRUCTION_MESSAGE in msg:
                             self.share_message(f"{INSTRUCTION_MESSAGE}{identification}: {msg[len(INSTRUCTION_MESSAGE):]}\n")
                     else:
+                        print(f"[{identification}] {msg}")
                         # the message will be shared with all other clients
                         self.share_message(msg)
                         # the message, azimuth and elevation will be send to the SuperCollider Server
