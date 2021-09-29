@@ -67,7 +67,8 @@ The attack, sustain and release of the created sounds depend on the negative, ne
 
 <img src="other/amp_expl.png" width="500"/>
 
-Very negative emojis will therefore have a long attack and a short release, whereas positive emojis have a short attack and a long release.
+Very negative emojis will therefore have a long attack and a short release, whereas positive emojis have a short attack and a long release.<br>
+Additionally, the overall score influences the frequency of the created sound. Very negative emojis will therefore sound a little deeper.
 
 ________________________________________________________________________________________________
 
